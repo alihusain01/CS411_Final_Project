@@ -1,29 +1,21 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import FilterAccordian from "./FilterAccordian.js";
+
 const SearchBar = () => {
   return (
     <div className="container-fluid mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        <div className="col-md-12">
           <div className="card">
-            <div className="card-header">Search</div>
+            <div className="card-header">
+              <h4>Search</h4>
+            </div>
             <div className="card-body">
-              <div class="form-group">
-                <label>Genre:</label>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label class="form-check-label" for="flexCheckDefault">
-                    Default checkbox
-                  </label>
-                </div>
-              </div>
-              <form>
+              <FilterAccordian />
+
+              <form className="mt-4">
                 <div className="mb-3">
                   <input
                     type="search"
@@ -32,9 +24,11 @@ const SearchBar = () => {
                     placeholder="Game Title"
                   />
                 </div>
-                <button type="submit" className="btn btn-primary">
-                  Search!
-                </button>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-primary" type="button">
+                    Search!
+                  </button>
+                </div>
               </form>
             </div>
           </div>
