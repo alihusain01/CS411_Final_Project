@@ -1,7 +1,9 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import Image from "react-bootstrap/Image";
+import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
+import Row from 'react-bootstrap/Row';
 //larger h value for text=smaller text size
 
 const GameDetails = () => {
@@ -14,12 +16,19 @@ const GameDetails = () => {
               <h4>Game Details</h4>
             </div>
             <div className="card-body">
-                <Image src="image_not_found.js" rounded />
-                 <h6>Year Released: </h6> 
-                 <h6>Console: </h6>
-                 <h6>Genre: </h6>
-                 <h6>Ratings: </h6>
-                 <h6>Multiplayer: </h6>
+              <Row>
+                <Col xs={3}>
+                <Image src="https://demofree.sirv.com/nope-not-here.jpg" rounded />
+                </Col>
+                <Col>
+                
+                 <p><h5>Year Released:</h5> </p>
+                 <p><h5>Console: </h5></p>
+                 <p><h5>Genre: </h5></p>
+                 <p><h5>Ratings: </h5></p>
+                 <p><h5>Multiplayer: </h5></p>
+                 </Col>
+                 </Row>
               <form className="mt-4">
               </form>
             </div>
