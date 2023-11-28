@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../main.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -24,12 +25,12 @@ const Login = () => {
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="card">
-            <div className="card-header">Login</div>
+            <div className="card-header fs-4">Login</div>
             <div className="card-body">
               <form onSubmit={handleLogin}>
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    Email address
+                  <label htmlFor="username" className="form-label">
+                    Username
                   </label>
                   <input
                     type="email"
@@ -56,6 +57,9 @@ const Login = () => {
                 <button type="submit" className="btn btn-primary">
                   Login
                 </button>
+              <a href="/signup">
+                <p className = "signup-link">Don't have an account? Sign up here!</p>
+              </a>
               </form>
             </div>
           </div>
