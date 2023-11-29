@@ -1,45 +1,26 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const PlatformFilter = () => {
+const PlatformFilter = ({ platforms, handlePlatformChange }) => {
   return (
     <div className="form-group">
       <div className="d-flex flex-wrap">
-        <div className="form-check mb-2 me-4">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="Mac"
-          />
-          <label className="form-check-label" htmlFor="Mac">
-            Mac
-          </label>
-        </div>
-
-        <div className="form-check mb-2 me-4">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="Linux"
-          />
-          <label className="form-check-label" htmlFor="Linux">
-            Linux
-          </label>
-        </div>
-
-        <div className="form-check mb-2 me-4">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="Windows"
-          />
-          <label className="form-check-label" htmlFor="Windows">
-            Windows
-          </label>
-        </div>
+        {Object.entries(platforms).map(([platformKey, value]) => {
+          return (
+            <div className="form-check mb-2 me-4" key={platformKey}>
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={value}
+                onChange={() => handlePlatformChange(platformKey)}
+                id={platformKey}
+              />
+              <label className="form-check-label" htmlFor={platformKey}>
+                {platformKey}
+              </label>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

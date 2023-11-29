@@ -1,13 +1,18 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const SelectFilters = () => {
+const SelectFilters = ({ selectValues, handleSelectChange }) => {
   return (
     <div className="form-group">
       <div className="row">
         <div className="col-md-4">
-          <select className="form-select" aria-label="Maximum Price">
-            <option selected>Maximum Price</option>
+          <select
+            className="form-select"
+            aria-label="Maximum Price"
+            value={selectValues.maximumPrice}
+            onChange={(e) => handleSelectChange('maximumPrice', e.target.value)}
+          >
+            <option value="">Maximum Price</option>
             <option value="10">$10</option>
             <option value="20">$20</option>
             <option value="30">$30</option>
@@ -18,17 +23,27 @@ const SelectFilters = () => {
         </div>
 
         <div className="col-md-4">
-          <select className="form-select" aria-label="Year Released">
-            <option selected>Year Released</option>
-            <option value="0">1990-2000</option>
-            <option value="1">2000-2010</option>
-            <option value="2">2010+</option>
+          <select
+            className="form-select"
+            aria-label="Year Released"
+            value={selectValues.yearReleased}
+            onChange={(e) => handleSelectChange('yearReleased', e.target.value)}
+          >
+            <option value="">Year Released</option>
+            <option value="1990-2000">1990-2000</option>
+            <option value="2000-2010">2000-2010</option>
+            <option value="2010+">2010+</option>
           </select>
         </div>
 
         <div className="col-md-4">
-          <select className="form-select" aria-label="Minimum Age">
-            <option selected>Minimum Age</option>
+          <select
+            className="form-select"
+            aria-label="Minimum Age"
+            value={selectValues.minimumAge}
+            onChange={(e) => handleSelectChange('minimumAge', e.target.value)}
+          >
+            <option value="">Minimum Age</option>
             <option value="0">None</option>
             <option value="13">13+</option>
             <option value="16">16+</option>

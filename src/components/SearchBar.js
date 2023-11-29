@@ -3,7 +3,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import FilterAccordian from "./FilterAccordian.js";
 
-const SearchBar = () => {
+const SearchBar = ({
+  genres,
+  platforms,
+  categories,
+  selectValues,
+  handleGenreChange,
+  handlePlatformChange,
+  handleCategoryChange,
+  handleSelectChange,
+}) => {
   return (
     <div className="container-fluid mt-5">
       <div className="row justify-content-center">
@@ -13,8 +22,16 @@ const SearchBar = () => {
               <h4>Search</h4>
             </div>
             <div className="card-body">
-              <FilterAccordian />
-
+              <FilterAccordian
+                genres={genres}
+                platforms={platforms}
+                categories={categories}
+                selectValues={selectValues}
+                handleGenreChange={handleGenreChange}
+                handlePlatformChange={handlePlatformChange}
+                handleCategoryChange={handleCategoryChange}
+                handleSelectChange={handleSelectChange}
+              />
               <form className="mt-4">
                 <div className="mb-3">
                   <input
