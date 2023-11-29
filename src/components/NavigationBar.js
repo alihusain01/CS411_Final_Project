@@ -6,7 +6,7 @@ function NavigationBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container className="fs-4">
-        <Navbar.Brand className="fs-3" href="/">Movie Magic</Navbar.Brand>
+        <Navbar.Brand className="fs-3" href="/">The Game Index</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
