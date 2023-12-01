@@ -23,10 +23,34 @@ const GameDetails = () => {
                 <Col>
                 
                  <p><h5>Year Released:</h5> </p>
-                 <p><h5>Console: </h5></p>
+                 <p><h5>Required Age:</h5> </p>
+                 <p><h5>Demo Count:</h5> </p>
+                 <p><h5>Developer Count:</h5> </p>
+                 <p><h5>DLC Count:</h5> </p>
+                 <p><h5>Metacritic score:</h5> </p>
+                 <p><h5>Movie Count:</h5> </p>
+                 <p><h5>Package Count:</h5> </p>
+                 <p><h5>Recommendation Count:</h5> </p>
+                 <p><h5>Publisher Count:</h5> </p>
+                 <p><h5>Screenshot Count:</h5> </p>
+                 <p><h5>Steam Spy Owners:</h5> </p>
+                 <p><h5>Steam Spy Owners Variance:</h5> </p>
+                 <p><h5>Steam Spy Players Estimate:</h5> </p>
+                 <p><h5>Steam Spy Players Variance:</h5> </p>
+                 <p><h5>Achievement Count:</h5> </p>
+                 <p><h5>Achievement Highlighted Count:</h5> </p>
+                 <p><h5>Currency of Price:</h5> </p>
+                 <p><h5>Final Price:</h5> </p>
+                 <p><h5>Short Description</h5> </p>
+                 <p><h5>Detailed Description</h5> </p>
+                 <p><h5>DRM notice:</h5> </p>
+                 <p><h5>Extended User Account Notice:</h5> </p>
+                 <p><h5>Header Image:</h5> </p>
+                 <p><h5>Legal Notice:</h5> </p>
+                 <p><h5>Reviews:</h5> </p>
                  <p><h5>Genre: </h5></p>
-                 <p><h5>Ratings: </h5></p>
-                 <p><h5>Multiplayer: </h5></p>
+                 <p><h5>Category: </h5></p>
+                 <p><h5>Platform: </h5></p>
                  </Col>
                  </Row>
               <form className="mt-4">

@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import SearchBar from "./components/SearchBar";
 import NavigationBar from "./components/NavigationBar";
 import Signup from "./components/Signup";
+import axios from 'axios';
 
 function App() {
   const [genres, setGenres] = useState({
@@ -46,6 +47,21 @@ function App() {
     yearReleased: "",
     minimumAge: "",
   });
+
+  const searchGames = () => {
+    console.log(genres);
+    axios.post('http://localhost:3002/api/get', {
+      genres: genres,
+      platforms: platforms,
+      categories: categories,
+    })
+      .then(response => {
+        alert('Success: ' + response.data); // Update this based on your server response
+      })
+      .catch(error => {
+        alert('Error: ' + error.message); // Handle the error appropriately
+      });
+  };
 
   const handleGenreChange = (genre) => {
     setGenres((prevGenres) => ({
@@ -92,6 +108,7 @@ function App() {
                 handlePlatformChange={handlePlatformChange}
                 handleCategoryChange={handleCategoryChange}
                 handleSelectChange={handleSelectChange}
+                searchGames={searchGames}
               />
             }
           />

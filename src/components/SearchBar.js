@@ -12,6 +12,7 @@ const SearchBar = ({
   handlePlatformChange,
   handleCategoryChange,
   handleSelectChange,
+  searchGames
 }) => {
   return (
     <div className="container-fluid mt-5">
@@ -42,7 +43,7 @@ const SearchBar = ({
                   />
                 </div>
                 <div class="d-grid gap-2">
-                  <button class="btn btn-primary" type="button">
+                  <button class="btn btn-primary" type="button" onClick={searchGames}>
                     Search!
                   </button>
                 </div>
