@@ -50,7 +50,7 @@ function App() {
 
   const searchGames = () => {
     console.log(genres);
-    axios.post('http://localhost:3002/api/get', {
+    axios.get('http://localhost:3002/api/searchGames', {
       genres: genres,
       platforms: platforms,
       categories: categories,
