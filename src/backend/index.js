@@ -223,10 +223,10 @@ app.get("/api/searchGames", async (req, res) => {
       releaseSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 1990 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2000)";
     }
     else if(selectValue.yearReleased === "2000-2010") {
-      releaseSQLString = "SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2000 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2010)";
+      releaseSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2000 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2010)";
     }
     else if(selectValue.yearReleased === "2010-") {
-      releaseSQLString = "SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2010)";
+      releaseSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2010)";
     }
     else {
       releaseSQLString = ""

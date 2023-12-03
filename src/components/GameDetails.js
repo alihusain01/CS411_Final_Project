@@ -196,7 +196,7 @@ const GameDetails = ({ games }) => {
               <Row>
                 <div className="mb-3">
                   <div className="mb-3 text-center">
-                    <h3>{game.responseName}</h3>
+                    <h1>{game.responseName}</h1>
                     <span>{detailedDescription}</span>
                   </div>
                 </div>
