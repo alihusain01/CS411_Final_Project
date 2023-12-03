@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../main.css';
+import axios from 'axios';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const loginSearch = () => {
+    // Make the GET request with query parameters
+    axios
+      .get('http://localhost:3002/api/login', {
+        params: {
+          userName: username,
+          password: password,
+        },
+      })
+      .then((response) => {
+        alert('Success: ' + JSON.stringify(response.data)); // Update this based on your server response
+      })
+      .catch((error) => {
+        alert('Incorrect username and password combination'); // Handle the error appropriately
+      });
+  };
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -17,7 +34,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     // Perform your login logic here
-    console.log(`Email: ${email}, Password: ${password}`);
+    console.log(`Email: ${username}, Password: ${password}`);
   };
 
   return (
@@ -33,11 +50,11 @@ const Login = () => {
                     Username
                   </label>
                   <input
-                    type="email"
+                    type="username"
                     className="form-control"
-                    id="email"
-                    placeholder="Enter your email"
-                    value={email}
+                    id="username"
+                    placeholder="Enter your username"
+                    value={username}
                     onChange={handleEmailChange}
                   />
                 </div>
@@ -54,7 +71,7 @@ const Login = () => {
                     onChange={handlePasswordChange}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary" onClick={loginSearch}>
                   Login
                 </button>
               <a href="/signup">
