@@ -187,7 +187,7 @@ app.get("/api/searchGames", async (req, res) => {
     console.log(selectValue.yearReleased);
     console.log(releaseSQLString);
 
-    const sqlSelect = "SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + " AND platformId = " + platformId + " AND categoryId = " + categoryId + priceSQLString + releaseSQLString + minAgeSQLString + textString;
+    const sqlSelect = "(SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + ") INTERSECT (SELECT * FROM steam_game_data.gameInfo WHERE platformId = " + platformId + ") INTERSECT (SELECT * FROM steam_game_data.gameInfo WHERE categoryId = " + categoryId + priceSQLString + releaseSQLString + minAgeSQLString + textString + " )";
 
     console.log(sqlSelect);
 
@@ -201,6 +201,37 @@ app.get("/api/searchGames", async (req, res) => {
 
   } catch (error) {
     console.error("Error handling the GET request:", error);
+    res.status(500).send("Server Error: " + error);
+  }
+});
+
+app.delete("/api/favoritedGames", async (req, res) => {
+  try {
+
+    const { userNameIn, gameIdIn } = req.query;
+
+    // Convert the query parameters to objects
+    const userName = JSON.parse(userNameIn || '{}');
+    const gameId = JSON.parse(gameIdIn || '{}');
+
+    // Now you can use these objects in your query
+    console.log(userName);
+    console.log(gameId);
+
+    const sqlDelete = "DELETE FROM steam_game_data.favoritedGames WHERE gameId = " + gameId;
+
+    console.log(sqlDelete);
+
+    pool.query(sqlDelete, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
+
+  } catch (error) {
+    console.error("Error handling the DELETE request:", error);
     res.status(500).send("Server Error: " + error);
   }
 });
