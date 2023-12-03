@@ -329,14 +329,105 @@ app.delete("/api/favoritedGames", async (req, res) => {
         console.log(err);
       } else {
         res.send(result);
+app.get("/api/login", async (req, res) => {
+  try {
+    const { userName, password } = req.query;
+
+    const sqlSelect = "SELECT * FROM steam_game_data.userInfo WHERE userName = '"+userName+"' AND password = '"+password+"'";
+    console.log(sqlSelect);
+    pool.query(sqlSelect, [userName, password], (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Server Error: " + err);
+      } else {
+        // Check if any rows were returned
+        if (result.length > 0) {
+          const user = result[0]; // Assuming the query returns only one user
+          // Store userName in the session
+          onLoginSuccess(userName);
+          res.send({
+            userName: user.userName,
+            password: user.password,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          });
+        } else {
+          res.status(401).send("Incorrect username and password combination");
+        }
       }
     });
 
   } catch (error) {
-    console.error("Error handling the DELETE request:", error);
+    console.error("Error handling the GET request:", error);
     res.status(500).send("Server Error: " + error);
   }
 });
+
+app.post("/api/favoritedGames", (req, res) => {
+  try {
+    const { userName, gameId } = req.query;
+    const sqlCheckFavorite = "SELECT * FROM steam_game_data.favoritedGames WHERE userName = ? AND gameId = ?";
+    pool.query(sqlCheckFavorite, [userName, gameId], (checkError, checkResult) => {
+      if (checkError) {
+        console.log(checkError);
+        res.status(500).send("Server Error: " + checkError);
+      } else {
+        if (checkResult.length === 0) {
+          const sqlInsertFavorite = "INSERT INTO steam_game_data.favoritedGames (userName, gameId) VALUES ('"+userName+"','"+gameId+"')";
+          pool.query(sqlInsertFavorite, [userName, gameId], (insertError, insertResult) => {
+            if (insertError) {
+              console.log(insertError);
+              res.status(500).send("Server Error: " + insertError);
+            } else {
+              console.log(`User ${userName} favorited game ${gameId}`);
+              res.send("Favorited game successfully!");
+            }
+          });
+        } else {
+          res.status(400).send("Game already favorited by the user");
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error handling the POST request:", error);
+    res.status(500).send("Server Error: " + error);
+  }
+});
+
+app.post("/api/signup", (req, res) => {
+  try {
+    const { userName, firstName, lastName, password } = req.body;
+    const sqlCheckUsername = "SELECT * FROM steam_game_data.userInfo WHERE userName = '" + userName + "'";
+    console.log(sqlCheckUsername);
+    pool.query(sqlCheckUsername, [userName], (checkError, checkResult) => {
+      if (checkError) {
+        console.log(checkError);
+        res.status(500).send("Server Error: " + checkError);
+      } else {
+        if (checkResult.length === 0) {
+          const sqlInsertUser = "INSERT INTO steam_game_data.userInfo (userName, firstName, lastName, password) VALUES ('"+userName+"','"+firstName+"','"+lastName+"','"+password+"')";
+          console.log(sqlInsertUser);
+          pool.query(sqlInsertUser, [userName, firstName, lastName, password], (insertError, insertResult) => {
+            if (insertError) {
+              console.log(insertError);
+              res.status(500).send("Server Error: " + insertError);
+            } else {
+              console.log(`User ${userName} created successfully`);
+              res.send("User created successfully!");
+            }
+          });
+        } else {
+          res.status(401).send("Username already taken");
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error handling the POST request:", error);
+    res.status(500).send("Server Error: " + error);
+  }
+});
+
+
 
 app.listen(3002, () => {
   console.log("Server is running on port 3002");
