@@ -38,6 +38,17 @@ const GameDetails = () => {
   const [categoryName, setcategoryName] = useState('');
   const [platformName, setplatformName] = useState('');
 
+  const addToFavorites = (gameId) => {
+    axios
+      .post('http://localhost:3002/api/favoritedGames', { userName, gameId })
+      .then((response) => {
+        alert('Success: ' + response.data);
+      })
+      .catch((error) => {
+        alert('Error: ' + error.message);
+      });
+  };
+
   return (
     <div className="container-fluid mt-5">
       <div className="row justify-content-center">
