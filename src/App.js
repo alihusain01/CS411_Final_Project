@@ -50,6 +50,8 @@ function App() {
 
   const [searchBarValue, setSearchBarValue] = useState("");
 
+  const [filteredGames, setFilteredGames] = useState([]);
+
   console.log(searchBarValue)
 
   const searchGames = () => {
@@ -73,6 +75,8 @@ function App() {
         },
       })
       .then((response) => {
+        setFilteredGames(JSON.stringify(response.data));
+        console.log(filteredGames);
         alert('Success: ' + JSON.stringify(response.data)); // Update this based on your server response
       })
       .catch((error) => {
