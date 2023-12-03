@@ -7,6 +7,7 @@ import SearchBar from "./components/SearchBar";
 import NavigationBar from "./components/NavigationBar";
 import Signup from "./components/Signup";
 import axios from 'axios';
+import 
 
 function App() {
   const [genres, setGenres] = useState({
@@ -103,6 +104,7 @@ function App() {
     <Router>
       <div>
         <NavigationBar />
+
         <Routes>
           <Route
             path="/"
