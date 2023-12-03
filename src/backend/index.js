@@ -147,7 +147,6 @@ app.get("/api/searchGames", async (req, res) => {
 app.get("/api/login", async (req, res) => {
   try {
     const { userName, password } = req.query;
-
     const sqlSelect = "SELECT * FROM steam_game_data.userInfo WHERE userName = '"+userName+"' AND password = '"+password+"'";
     console.log(sqlSelect);
     pool.query(sqlSelect, [userName, password], (err, result) => {
@@ -158,8 +157,6 @@ app.get("/api/login", async (req, res) => {
         // Check if any rows were returned
         if (result.length > 0) {
           const user = result[0]; // Assuming the query returns only one user
-          // Store userName in the session
-          onLoginSuccess(userName);
           res.send({
             userName: user.userName,
             password: user.password,
@@ -171,7 +168,6 @@ app.get("/api/login", async (req, res) => {
         }
       }
     });
-
   } catch (error) {
     console.error("Error handling the GET request:", error);
     res.status(500).send("Server Error: " + error);
