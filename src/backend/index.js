@@ -32,6 +32,19 @@ const initializePool = async () => {
 
 initializePool();
 
+app.get("/api/getAllGames", (req, res) => {
+  const query = "SELECT * FROM steam_game_data.gameInfo LIMIT 100";
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+
+});
+
 app.get("/api/searchGames", async (req, res) => {
   try {
 
