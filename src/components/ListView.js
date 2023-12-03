@@ -13,6 +13,7 @@ function ListView({ games }) {
             <th>Price</th>
             <th>Release Date</th>
             <th>Metacritic Score</th>
+            <th>Your Score</th>
           </tr>
         </thead>
         <tbody>
@@ -26,6 +27,7 @@ function ListView({ games }) {
               </td>
               <td>{game.releaseDate}</td>
               <td>{game.metacritic}</td>
+              <td>{game.score.toFixed()}</td>
             </tr>
           ))}
         </tbody>
