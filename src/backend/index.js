@@ -16,6 +16,7 @@ const createTcpPool = async () => {
     port: '3306',
     user: 'root',
     password: 'teamGreen',
+    database: 'steam_game_data'
   };
 
   return mysql.createPool(dbConfig);
@@ -31,6 +32,67 @@ const initializePool = async () => {
 };
 
 initializePool();
+
+app.get("/api/genreTable", (req, res) => {
+  const genreId = req.query.genreId;
+  const query = "SELECT * FROM steam_game_data.genre WHERE genreId = " + genreId;
+
+  console.log(query);
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log(err);
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+app.get("/api/categoryTable", (req, res) => {
+  const categoryId = req.query.categoryId;
+  const query = "SELECT * FROM steam_game_data.category WHERE categoryId = " + categoryId;
+
+  console.log(query);
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+      console.log(err);
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+app.get("/api/platformTable", (req, res) => {
+  const platformId = req.query.platformId;
+  const query = "SELECT * FROM steam_game_data.platform WHERE platformId = " + platformId;
+
+  console.log(query);
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log(err);
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+app.get("/api/findCounts" , (req, res) => {
+    const query = "CALL FindCounts();"
+
+    pool.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
+
+});
 
 app.get("/api/getAllGames", (req, res) => {
   const query = "SELECT * FROM steam_game_data.gameInfo LIMIT 100";
@@ -71,6 +133,7 @@ app.get("/api/searchGames", async (req, res) => {
     var releaseSQLString;
     var minAgeSQLString;
     var priceSQLString;
+    var textString;
 
 
     if(genre.nonGame === true) {
@@ -149,21 +212,21 @@ app.get("/api/searchGames", async (req, res) => {
         categoryId = categoryId | 128;
     }
 
-    if(selectValue.maximumPrice = " ") {
+    if(selectValue.maximumPrice === " ") {
       priceSQLString = ""
     }
     else {
-      priceSQLString = " AND priceFinal < " + selectValue.maximumPrice
+      priceSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE priceFinal < " + selectValue.maximumPrice + ")";
     }
 
     if(selectValue.yearReleased === "1990-2000") {
-      releaseSQLString = " AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 1990 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2000";
+      releaseSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 1990 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2000)";
     }
     else if(selectValue.yearReleased === "2000-2010") {
-      releaseSQLString = " AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2000 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2010";
+      releaseSQLString = "SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2000 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2010)";
     }
     else if(selectValue.yearReleased === "2010-") {
-      releaseSQLString = " AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2010";
+      releaseSQLString = "SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2010)";
     }
     else {
       releaseSQLString = ""
@@ -173,23 +236,23 @@ app.get("/api/searchGames", async (req, res) => {
       minAgeSQLString = "";
     }
     else if(selectValue.minimumAge === "13") {
-      minAgeSQLString = " AND requiredAge <= 13";
+      minAgeSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE requiredAge <= 13)";
     }
     else if(selectValue.minimumAge === "16") {
-      minAgeSQLString = " AND requiredAge <= 16";
+      minAgeSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE requiredAge <= 16)";
     }
     else if(selectValue.minimumAge === "17") {
-      minAgeSQLString = " AND requiredAge <= 17";
+      minAgeSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE requiredAge <= 17)";
     }
     else if(selectValue.minimumAge === "18") {
-      minAgeSQLString = " AND requiredAge <= 18";
+      minAgeSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE requiredAge <= 18)";
     }
     else {
       minAgeSQLString = ""
     }
 
     if(searchBarValue !== "") {
-      textString = " " + " AND responseName LIKE '%" + searchBarValue + "%'"
+      textString = "(SELECT * FROM steam_game_data.gameInfo WHERE responseName LIKE '%" + searchBarValue + "%')"
     }
     else {
       textString = ""
@@ -200,15 +263,41 @@ app.get("/api/searchGames", async (req, res) => {
     console.log(selectValue.yearReleased);
     console.log(releaseSQLString);
 
-    const sqlSelect = "(SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + ") INTERSECT (SELECT * FROM steam_game_data.gameInfo WHERE platformId = " + platformId + ") INTERSECT (SELECT * FROM steam_game_data.gameInfo WHERE categoryId = " + categoryId + priceSQLString + releaseSQLString + minAgeSQLString + textString + " )";
+    const genreSelect = "(SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + ")";
+    const platformSelect = "(SELECT * FROM steam_game_data.gameInfo WHERE platformId = " + platformId + ")";
+    const categorySelect = "(SELECT * FROM steam_game_data.gameInfo WHERE categoryId = " + categoryId + ")";
 
-    console.log(sqlSelect);
+    var final_query = ""
 
-    pool.query(sqlSelect, (err, result) => {
+    if(genreId !== 0) {
+      final_query += genreSelect + " INTERSECT ";
+    }
+    if(platformId !== 0) {
+      final_query += platformSelect + " INTERSECT ";
+    }
+    if(categoryId !== 0) {
+      final_query += categorySelect + " INTERSECT ";
+    }
+    if(selectValue.maximumPrice !== "") {
+      final_query += priceSQLString + " INTERSECT ";
+    }
+    if(selectValue.yearReleased !== "") {
+      final_query += releaseSQLString + " INTERSECT ";
+    }
+    if(searchBarValue !== "") {
+      final_query += textString + " INTERSECT ";
+    }
+
+    if (final_query !== "") {
+      final_query = final_query.substring(0, final_query.length - 10);
+    }
+
+
+    pool.query(final_query, (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        res.send(result);
+        res.status(200).send(result);
       }
     });
 

@@ -4,6 +4,47 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Badge from "react-bootstrap/Badge";
+import axios from "axios";
+
+// Helper function to generate a random background color
+const getRandomColor = () => {
+  const colors = [
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "light",
+    "dark",
+  ];
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+};
+
+const matchColorText = (color) => {
+  switch (color) {
+    case "primary":
+      return "light";
+    case "secondary":
+      return "light";
+    case "success":
+      return "light";
+    case "danger":
+      return "light";
+    case "warning":
+      return "dark";
+    case "info":
+      return "light";
+    case "light":
+      return "dark";
+    case "dark":
+      return "light";
+    default:
+      return "dark";
+  }
+}
 
 const GameDetails = ({ games }) => {
   let { id } = useParams();
@@ -13,15 +54,14 @@ const GameDetails = ({ games }) => {
     return Number(game.gameId) === id;
   });
 
-  console.log("index: " + index);
   const [game, setGame] = useState(games[index]);
 
   // Column 1
   const [releaseDate, setReleaseDate] = useState("");
   const [priceFinal, setPriceFinal] = useState(0.0);
-  const [genreName, setGenreName] = useState("");
-  const [categoryName, setCategoryName] = useState("");
-  const [platformName, setPlatformName] = useState("");
+  const [genres, setGenres] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
   const [detailedDescription, setDetailedDescription] = useState("");
   const [requiredAge, setRequiredAge] = useState(0);
   const [demoCount, setDemoCount] = useState(0);
@@ -55,13 +95,9 @@ const GameDetails = ({ games }) => {
   useEffect(() => {
     // Set state variables based on the game data when it changes
 
-    console.log(game);
-
+    // console.log(game);
     setReleaseDate(game.releaseDate);
     setPriceFinal(game.priceFinal);
-    setGenreName(game.genreName);
-    setCategoryName(game.categoryName);
-    setPlatformName(game.platformName);
     setDetailedDescription(game.detailedDescrip);
     setRequiredAge(game.requiredAge);
     setDemoCount(game.demoCount);
@@ -88,17 +124,146 @@ const GameDetails = ({ games }) => {
     setReviews(game.reviews);
     setMovieCount(game.movieCount);
     setRecommendationCount(game.recommendationCount);
+
+    axios
+      .get("http://localhost:3002/api/genreTable", {
+        params: {
+          genreId: game.genreId,
+        },
+      })
+      .then((response) => {
+        const genreData = response.data[0].genreName.split(";");
+        genreData.pop(); // Remove the last element
+
+        setGenres(genreData);
+        console.log(genres.length);
+      })
+      .catch((error) => {
+        alert("Error: " + error.message); // Handle the error appropriately
+      });
+
+    axios
+      .get("http://localhost:3002/api/categoryTable", {
+        params: {
+          categoryId: game.categoryId,
+        },
+      })
+      .then((response) => {
+        const categoryData = response.data[0].categoryName.split(";");
+        categoryData.pop(); // Remove the last element
+
+        setCategories(categoryData);
+        console.log(categories.length);
+      })
+      .catch((error) => {
+        alert("Error: " + error.message); // Handle the error appropriately
+      });
+
+    axios
+      .get("http://localhost:3002/api/platformTable", {
+        params: {
+          platformId: game.platformId,
+        },
+      })
+      .then((response) => {
+        const platformData = response.data[0].platformName.split(";");
+
+        setPlatforms(platformData);
+        console.log(platforms.length);
+      })
+      .catch((error) => {
+        alert("Error: " + error.message); // Handle the error appropriately
+      });
   }, [game]);
+
+  const headerStyle = {
+    backgroundImage: `url(${game.headerImage})`,
+    minHeight: "350px", // Adjust the minimum height as needed
+    backgroundSize: "cover", // You can adjust the background size as needed
+    backgroundPosition: "center", // You can adjust the background position as needed
+  };
 
   return (
     <div className="container-fluid mt-5">
       <div className="row justify-content-center">
         <div className="col-md-12">
           <div className="card">
-            <div className="card-header">
+            {/* <div className="card-header">
               <h4>{game.responseName}</h4>
-            </div>
+            </div> */}
+            <div className="header-banner" style={headerStyle}></div>
             <div className="card-body">
+              <Row>
+                <div className="mb-3">
+                  <div className="mb-3 text-center">
+                    <h3>{game.responseName}</h3>
+                    <span>{detailedDescription}</span>
+                  </div>
+                </div>
+              </Row>
+              <Row>
+                <div className="mb-3">
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Genre: </span>
+                      {genres.map((genre, index) => {
+                        let color = getRandomColor();
+                        return (
+                          <Badge
+                            key={index}
+                            pill
+                            bg={color}
+                            text={matchColorText(color)}
+                            className="me-2 mb-2"
+                          >
+                            {genre}
+                          </Badge>
+                        );
+                      })}
+                    </div>
+
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Platform: </span>
+                      {platforms.map((platform, index) => {
+                        return (
+                          <Badge
+                            key={index}
+                            pill
+                            bg={'info'}
+                            text={'light'}
+                            className="me-2 mb-2"
+                          >
+                            {platform}
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Categories: </span>
+                      {categories.map((category, index) => {
+                        let color = getRandomColor();
+                        return (
+                          <Badge
+                            key={index}
+                            pill
+                            bg={'dark'}
+                            text={'light'}
+                            className="me-2 mb-2"
+                          >
+                            {category}
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </Row>
+
+              <Row>
+                <div className="mb-3 text-center">
+                  <h3>Additional Info</h3>
+                </div>
+              </Row>
               <Row>
                 <Col>
                   {/* Column 1 */}
@@ -108,23 +273,9 @@ const GameDetails = ({ games }) => {
                   </div>
                   <div className="mb-3">
                     <span style={{ fontWeight: "bold" }}>Price Final: </span>
-                    <span>{priceFinal}</span>
-                  </div>
-                  <div className="mb-3">
-                    <span style={{ fontWeight: "bold" }}>Genres: </span>
-                    <span>{genreName}</span>
-                  </div>
-                  <div className="mb-3">
-                    <span style={{ fontWeight: "bold" }}>Categories: </span>
-                    <span>{categoryName}</span>
-                  </div>
-                  <div className="mb-3">
-                    <span style={{ fontWeight: "bold" }}>Platforms: </span>
-                    <span>{platformName}</span>
-                  </div>
-                  <div className="mb-3">
-                    <span style={{ fontWeight: "bold" }}>Description: </span>
-                    <span>{detailedDescription}</span>
+                    <span>
+                      {priceFinal} {priceCurrency}
+                    </span>
                   </div>
                   <div className="mb-3">
                     <span style={{ fontWeight: "bold" }}>Required Age: </span>
@@ -144,8 +295,6 @@ const GameDetails = ({ games }) => {
                     </span>
                     <span>{metacritic}</span>
                   </div>
-                </Col>
-                <Col>
                   <div className="mb-3">
                     <span style={{ fontWeight: "bold" }}>
                       Publisher Count:{" "}
@@ -158,6 +307,8 @@ const GameDetails = ({ games }) => {
                     </span>
                     <span>{screenshotCount}</span>
                   </div>
+                </Col>
+                <Col>
                   <div className="mb-3">
                     <span style={{ fontWeight: "bold" }}>
                       Steam Spy Owners:{" "}
@@ -196,14 +347,6 @@ const GameDetails = ({ games }) => {
                   </div>
                   <div className="mb-3">
                     <span style={{ fontWeight: "bold" }}>
-                      Currency of Price:{" "}
-                    </span>
-                    <span>{priceCurrency}</span>
-                  </div>
-                </Col>
-                <Col>
-                  <div className="mb-3">
-                    <span style={{ fontWeight: "bold" }}>
                       Developer Count:{" "}
                     </span>
                     <span>{developerCount}</span>
@@ -212,12 +355,8 @@ const GameDetails = ({ games }) => {
                     <span style={{ fontWeight: "bold" }}>Package Count: </span>
                     <span>{packageCount}</span>
                   </div>
-                  <div className="mb-3">
-                    <span style={{ fontWeight: "bold" }}>
-                      Short Description:{" "}
-                    </span>
-                    <span>{shortDescrip}</span>
-                  </div>
+                </Col>
+                <Col>
                   <div className="mb-3">
                     <span style={{ fontWeight: "bold" }}>DRM Notice: </span>
                     <span>{drmNotice}</span>
@@ -227,10 +366,6 @@ const GameDetails = ({ games }) => {
                       Extended User Account Notice:{" "}
                     </span>
                     <span>{extUserAcctNotice}</span>
-                  </div>
-                  <div className="mb-3">
-                    <span style={{ fontWeight: "bold" }}>Header Image: </span>
-                    <span>{headerImage}</span>
                   </div>
                   <div className="mb-3">
                     <span style={{ fontWeight: "bold" }}>Legal Notice: </span>

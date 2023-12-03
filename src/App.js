@@ -55,8 +55,6 @@ function App() {
 
   const [filteredGames, setFilteredGames] = useState([]);
 
-  console.log(searchBarValue)
-
   const searchGames = () => {
     // Convert state objects to JSON strings
     const genresString = JSON.stringify(genres);
@@ -77,9 +75,8 @@ function App() {
         },
       })
       .then((response) => {
-        setFilteredGames(JSON.stringify(response.data));
-        console.log(filteredGames);
-        alert('Success: ' + JSON.stringify(response.data)); // Update this based on your server response
+        setFilteredGames(response.data);
+        console.log(response);
       })
       .catch((error) => {
         alert("Error: " + error.message); // Handle the error appropriately
@@ -138,7 +135,7 @@ function App() {
                   handleSearchBarChange={handleSearchBarChange}
                   searchGames={searchGames}
                 />
-                <ListView games={games} />
+                <ListView games={filteredGames} />
               </>
             }
           />
@@ -147,7 +144,7 @@ function App() {
 
           <Route
             path="/game/:id"
-            element={<GameDetails games={games} />}
+            element={<GameDetails games={filteredGames} />}
           />
         </Routes>
       </div>
