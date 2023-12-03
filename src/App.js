@@ -6,7 +6,10 @@ import Login from "./components/Login";
 import SearchBar from "./components/SearchBar";
 import NavigationBar from "./components/NavigationBar";
 import Signup from "./components/Signup";
-import axios from 'axios';
+import axios from "axios";
+import ListView from "./components/ListView";
+import games from "./backend/testData.js";
+import GameDetails from "./components/GameDetails";
 
 function App() {
   const [genres, setGenres] = useState({
@@ -50,6 +53,7 @@ function App() {
 
   const [searchBarValue, setSearchBarValue] = useState("");
 
+  const [filteredGames, setFilteredGames] = useState([]);
   const [userName, setuserNameValue] = useState("");
   
 
@@ -60,22 +64,26 @@ function App() {
     const genresString = JSON.stringify(genres);
     const platformsString = JSON.stringify(platforms);
     const categoriesString = JSON.stringify(categories);
+    const selectValuesString = JSON.stringify(selectValues);
+    const searchBarValueString = JSON.stringify(searchBarValue);
 
-  
     // Make the GET request with query parameters
     axios
-      .get('http://localhost:3002/api/searchGames', {
+      .get("http://localhost:3002/api/searchGames", {
         params: {
           genres: genresString,
           platforms: platformsString,
           categories: categoriesString,
+          selectValues: selectValuesString,
+          searchBarValues: searchBarValueString,
         },
       })
       .then((response) => {
-        alert('Success: ' + JSON.stringify(response.data)); // Update this based on your server response
+        setFilteredGames(response.data);
+        console.log(response);
       })
       .catch((error) => {
-        alert('Error: ' + error.message); // Handle the error appropriately
+        alert("Error: " + error.message); // Handle the error appropriately
       });
   };
   const handleGenreChange = (genre) => {
@@ -112,7 +120,7 @@ function App() {
 
   const handleSearchBarChange = (event) => {
     setSearchBarValue(event.target.value);
-  }
+  };
 
   return (
     <Router>
@@ -122,22 +130,30 @@ function App() {
           <Route
             path="/"
             element={
-              <SearchBar
-                genres={genres}
-                platforms={platforms}
-                categories={categories}
-                selectValues={selectValues}
-                handleGenreChange={handleGenreChange}
-                handlePlatformChange={handlePlatformChange}
-                handleCategoryChange={handleCategoryChange}
-                handleSelectChange={handleSelectChange}
-                handleSearchBarChange={handleSearchBarChange}
-                searchGames={searchGames}
-              />
+              <>
+                <SearchBar
+                  genres={genres}
+                  platforms={platforms}
+                  categories={categories}
+                  selectValues={selectValues}
+                  handleGenreChange={handleGenreChange}
+                  handlePlatformChange={handlePlatformChange}
+                  handleCategoryChange={handleCategoryChange}
+                  handleSelectChange={handleSelectChange}
+                  handleSearchBarChange={handleSearchBarChange}
+                  searchGames={searchGames}
+                />
+                <ListView games={filteredGames} />
+              </>
             }
           />
           <Route path="/login" element={<Login onLoginSuccess={handleuserNameChange}/>} />
           <Route path="/signup" element={<Signup />} />
+
+          <Route
+            path="/game/:id"
+            element={<GameDetails games={filteredGames} />}
+          />
         </Routes>
       </div>
     </Router>

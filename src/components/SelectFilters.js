@@ -32,7 +32,7 @@ const SelectFilters = ({ selectValues, handleSelectChange }) => {
             <option value="">Year Released</option>
             <option value="1990-2000">1990-2000</option>
             <option value="2000-2010">2000-2010</option>
-            <option value="2010+">2010+</option>
+            <option value="2010-">2010+</option>
           </select>
         </div>
 

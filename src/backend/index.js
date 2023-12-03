@@ -16,6 +16,7 @@ const createTcpPool = async () => {
     port: '3306',
     user: 'root',
     password: 'teamGreen',
+    database: 'steam_game_data'
   };
 
   return mysql.createPool(dbConfig);
@@ -32,25 +33,108 @@ const initializePool = async () => {
 
 initializePool();
 
+app.get("/api/genreTable", (req, res) => {
+  const genreId = req.query.genreId;
+  const query = "SELECT * FROM steam_game_data.genre WHERE genreId = " + genreId;
+
+  console.log(query);
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log(err);
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+app.get("/api/categoryTable", (req, res) => {
+  const categoryId = req.query.categoryId;
+  const query = "SELECT * FROM steam_game_data.category WHERE categoryId = " + categoryId;
+
+  console.log(query);
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+      console.log(err);
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+app.get("/api/platformTable", (req, res) => {
+  const platformId = req.query.platformId;
+  const query = "SELECT * FROM steam_game_data.platform WHERE platformId = " + platformId;
+
+  console.log(query);
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log(err);
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+app.get("/api/findCounts" , (req, res) => {
+    const query = "CALL FindCounts();"
+
+    pool.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
+
+});
+
+app.get("/api/getAllGames", (req, res) => {
+  const query = "SELECT * FROM steam_game_data.gameInfo LIMIT 100";
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+
+});
 
 app.get("/api/searchGames", async (req, res) => {
   try {
 
-    const { genres, platforms, categories } = req.query;
+    const { genres, platforms, categories, selectValues, searchBarValues } = req.query;
 
     // Convert the query parameters to objects
     const genre = JSON.parse(genres || '{}');
     const platform = JSON.parse(platforms || '{}');
     const category = JSON.parse(categories || '{}');
+    const selectValue = JSON.parse(selectValues || '{}');
+    const searchBarValue = JSON.parse(searchBarValues || '{}');
 
     // Now you can use these objects in your query
     console.log(genre);
     console.log(platform);
     console.log(category);
+    console.log(selectValue);
+    console.log(searchBarValue);
+
 
     var genreId = 0;
     var platformId = 0;
     var categoryId = 0;
+    var releaseSQLString;
+    var minAgeSQLString;
+    var priceSQLString;
+    var textString;
+
 
     if(genre.nonGame === true) {
         genreId = genreId | 1;
@@ -128,18 +212,127 @@ app.get("/api/searchGames", async (req, res) => {
         categoryId = categoryId | 128;
     }
 
-    const sqlSelect = "SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + " AND platformId = " + platformId + " AND categoryId = " + categoryId;
+    if(selectValue.maximumPrice === " ") {
+      priceSQLString = ""
+    }
+    else {
+      priceSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE priceFinal < " + selectValue.maximumPrice + ")";
+    }
 
-    pool.query(sqlSelect, (err, result) => {
+    if(selectValue.yearReleased === "1990-2000") {
+      releaseSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 1990 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2000)";
+    }
+    else if(selectValue.yearReleased === "2000-2010") {
+      releaseSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2000 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2010)";
+    }
+    else if(selectValue.yearReleased === "2010-") {
+      releaseSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2010)";
+    }
+    else {
+      releaseSQLString = ""
+    }
+
+    if(selectValue.minimumAge === "0") {
+      minAgeSQLString = "";
+    }
+    else if(selectValue.minimumAge === "13") {
+      minAgeSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE requiredAge <= 13)";
+    }
+    else if(selectValue.minimumAge === "16") {
+      minAgeSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE requiredAge <= 16)";
+    }
+    else if(selectValue.minimumAge === "17") {
+      minAgeSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE requiredAge <= 17)";
+    }
+    else if(selectValue.minimumAge === "18") {
+      minAgeSQLString = "(SELECT * FROM steam_game_data.gameInfo WHERE requiredAge <= 18)";
+    }
+    else {
+      minAgeSQLString = ""
+    }
+
+    if(searchBarValue !== "") {
+      textString = "(SELECT * FROM steam_game_data.gameInfo WHERE responseName LIKE '%" + searchBarValue + "%')"
+    }
+    else {
+      textString = ""
+    }
+
+    //releaseSQLString = "cast(right(releaseDate,4) AS UNSIGNED) >= 2016";
+  
+    console.log(selectValue.yearReleased);
+    console.log(releaseSQLString);
+
+    const genreSelect = "(SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + ")";
+    const platformSelect = "(SELECT * FROM steam_game_data.gameInfo WHERE platformId = " + platformId + ")";
+    const categorySelect = "(SELECT * FROM steam_game_data.gameInfo WHERE categoryId = " + categoryId + ")";
+
+    var final_query = ""
+
+    if(genreId !== 0) {
+      final_query += genreSelect + " INTERSECT ";
+    }
+    if(platformId !== 0) {
+      final_query += platformSelect + " INTERSECT ";
+    }
+    if(categoryId !== 0) {
+      final_query += categorySelect + " INTERSECT ";
+    }
+    if(selectValue.maximumPrice !== "") {
+      final_query += priceSQLString + " INTERSECT ";
+    }
+    if(selectValue.yearReleased !== "") {
+      final_query += releaseSQLString + " INTERSECT ";
+    }
+    if(searchBarValue !== "") {
+      final_query += textString + " INTERSECT ";
+    }
+
+    if (final_query !== "") {
+      final_query = final_query.substring(0, final_query.length - 10);
+    }
+
+
+    pool.query(final_query, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send(result);
+      }
+    });
+
+  } catch (error) {
+    console.error("Error handling the GET request:", error);
+    res.status(500).send("Server Error: " + error);
+  }
+});
+
+app.delete("/api/favoritedGames", async (req, res) => {
+  try {
+
+    const { userNameIn, gameIdIn } = req.query;
+
+    // Convert the query parameters to objects
+    const userName = JSON.parse(userNameIn || '{}');
+    const gameId = JSON.parse(gameIdIn || '{}');
+
+    // Now you can use these objects in your query
+    console.log(userName);
+    console.log(gameId);
+
+    const sqlDelete = "DELETE FROM steam_game_data.favoritedGames WHERE gameId = " + gameId;
+
+    console.log(sqlDelete);
+
+    pool.query(sqlDelete, (err, result) => {
       if (err) {
         console.log(err);
       } else {
         res.send(result);
       }
     });
-
   } catch (error) {
-    console.error("Error handling the GET request:", error);
+    console.error("Error handling the DELETE request:", error);
     res.status(500).send("Server Error: " + error);
   }
 });
