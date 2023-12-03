@@ -1,37 +1,36 @@
-import Table from 'react-bootstrap/Table';
+import React from "react";
+import Table from "react-bootstrap/Table";
+import Container from "react-bootstrap/Container";
+import { Link } from "react-router-dom";
 
-
-function ListView() {
+function ListView({ games }) {
   return (
-    <Table striped bordered hover variant="dark">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td colSpan={2}>Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
-    </Table>
+    <Container className="mt-4">
+      <Table striped bordered hover variant="light">
+        <thead>
+          <tr>
+            <th>Game Title</th>
+            <th>Price</th>
+            <th>Release Date</th>
+            <th>Metacritic Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {games.map((game, index) => (
+            <tr key={index}>
+              <td>
+                <Link to={`/game/${game.gameId}`}>{game.responseName}</Link>
+              </td>
+              <td>
+                {game.priceFinal} {game.priceCurrency}
+              </td>
+              <td>{game.releaseDate}</td>
+              <td>{game.metacritic}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Container>
   );
 }
 
