@@ -1,7 +1,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Login from "./components/Login";
 import SearchBar from "./components/SearchBar";
 import NavigationBar from "./components/NavigationBar";
@@ -10,6 +10,8 @@ import axios from "axios";
 import ListView from "./components/ListView";
 import games from "./backend/testData.js";
 import GameDetails from "./components/GameDetails";
+import { useDispatch } from "react-redux";
+import { logout } from "./user_auth/actions";
 
 function App() {
   useEffect(() =>{
@@ -97,8 +99,9 @@ function App() {
   }
 
   /* Login Information */
-  const [userName, setuserNameValue] = useState("");
+ 
 
+  const dispatch = useDispatch();
 
   const searchGames = () => {
     // Convert state objects to JSON strings
@@ -175,14 +178,14 @@ function App() {
     setSearchBarValue(event.target.value);
   };
 
-  const onLoginSuccess = (userName) => {
-    setuserNameValue(userName);
-  }
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <Router>
       <div>
-        <NavigationBar />
+        <NavigationBar onLogout={handleLogout}/>
         <Routes>
           <Route
             path="/"
@@ -206,7 +209,7 @@ function App() {
           />
           <Route
             path="/login"
-            element={<Login onLoginSuccess={onLoginSuccess} />}
+            element={<Login/>}
           />
           <Route path="/signup" element={<Signup />} />
 

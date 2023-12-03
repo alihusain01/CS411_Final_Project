@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../main.css';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../user_auth/actions';
 
-const Login = ({onLoginSuccess}) => {
+const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
 
   const loginSearch = () => {
     // Make the GET request with query parameters
@@ -17,14 +21,16 @@ const Login = ({onLoginSuccess}) => {
         },
       })
       .then((response) => {
-        onLoginSuccess(response.data.userName);
+        const userData = { username: response.data.username, firstName: response.data.firstName, lastName: response.data.lastName };
+
+        dispatch(login(userData));
+
         console.log('Success: ' + JSON.stringify(response.data)); // Update this based on your server response
       })
       .catch((error) => {
         alert('Incorrect username and password combination'); // Handle the error appropriately
       });
   };
-
 
   const handleEmailChange = (e) => {
     setUsername(e.target.value);
