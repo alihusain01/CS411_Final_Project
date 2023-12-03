@@ -3,7 +3,8 @@ import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 
-function ListView({ games }) {
+function ListView({ games, userName }) {
+  const userName2="ldaskfj;s";
   return (
     <Container className="mt-4">
       <Table striped bordered hover variant="light">
@@ -13,7 +14,7 @@ function ListView({ games }) {
             <th>Price</th>
             <th>Release Date</th>
             <th>Metacritic Score</th>
-            <th>Your Score</th>
+            {userName!="" &&(<th>Your Score</th>)}
           </tr>
         </thead>
         <tbody>
@@ -27,7 +28,7 @@ function ListView({ games }) {
               </td>
               <td>{game.releaseDate}</td>
               <td>{game.metacritic}</td>
-              <td>{game.score.toFixed()}</td>
+              {userName!="" && <td>{game.score.toFixed()}</td>}
             </tr>
           ))}
         </tbody>
