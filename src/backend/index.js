@@ -329,6 +329,14 @@ app.delete("/api/favoritedGames", async (req, res) => {
         console.log(err);
       } else {
         res.send(result);
+      }
+    });
+  } catch (error) {
+    console.error("Error handling the DELETE request:", error);
+    res.status(500).send("Server Error: " + error);
+  }
+});
+
 app.get("/api/login", async (req, res) => {
   try {
     const { userName, password } = req.query;
