@@ -49,20 +49,28 @@ function App() {
   });
 
   const searchGames = () => {
-    console.log(genres);
-    axios.get('http://localhost:3002/api/searchGames', {
-      genres: genres,
-      platforms: platforms,
-      categories: categories,
-    })
-      .then(response => {
-        alert('Success: ' + response.data); // Update this based on your server response
+    // Convert state objects to JSON strings
+    const genresString = JSON.stringify(genres);
+    const platformsString = JSON.stringify(platforms);
+    const categoriesString = JSON.stringify(categories);
+
+  
+    // Make the GET request with query parameters
+    axios
+      .get('http://localhost:3002/api/searchGames', {
+        params: {
+          genres: genresString,
+          platforms: platformsString,
+          categories: categoriesString,
+        },
       })
-      .catch(error => {
+      .then((response) => {
+        alert('Success: ' + JSON.stringify(response.data)); // Update this based on your server response
+      })
+      .catch((error) => {
         alert('Error: ' + error.message); // Handle the error appropriately
       });
   };
-
   const handleGenreChange = (genre) => {
     setGenres((prevGenres) => ({
       ...prevGenres,

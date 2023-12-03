@@ -32,51 +32,108 @@ const initializePool = async () => {
 
 initializePool();
 
-// var connection = mysql.createConnection({
-//   host: "34.66.177.166",
-//   port: "3306",
-//   user: "root",
-//   password: "teamGreen",
-//   database: "steam_game_data"
-// });
-
-// connection.connect();
-
-// connection.query('SELECT * FROM gameInfo limit 100;', function(err, rows, fields) {
-//   if(err) console.log(err);
-//   console.log('The solution is: ', rows);
-//   connection.end();
-// });
-
-
 app.get("/api/searchGames", async (req, res) => {
   try {
-    // var genreId = 4;
-    // var platformId = 2;
-    // var categoryId = 6;
 
-    // const sqlSelect =
-    //   "SELECT * FROM steam_game_data.gameInfo WHERE genreId = " +
-    //   genreId +
-    //   " AND platformId = " +
-    //   platformId +
-    //   " AND categoryId = " +
-    //   categoryId;
+    const { genres, platforms, categories } = req.query;
 
-    // const rows = await pool.query(sqlSelect);
-    // res.json(rows);
+    // Convert the query parameters to objects
+    const genre = JSON.parse(genres || '{}');
+    const platform = JSON.parse(platforms || '{}');
+    const category = JSON.parse(categories || '{}');
 
-    // Simple SELECT query
-    const query = "SELECT * FROM steam_game_data.gameInfo limit 100;";
-        
-    // Execute the query
-    pool.query(query, (err, results) => {
+    // Now you can use these objects in your query
+    console.log(genre);
+    console.log(platform);
+    console.log(category);
+
+    var genreId = 0;
+    var platformId = 0;
+    var categoryId = 0;
+
+    if(genre.nonGame === true) {
+        genreId = genreId | 1;
+    }
+    if(genre.indie === true) {
+        genreId = genreId | 2;
+    }
+    if(genre.action === true) {
+        genreId = genreId | 4;
+    }
+    if(genre.adventure === true) {
+        genreId = genreId | 8;
+    }
+    if(genre.casual === true) {
+        genreId = genreId | 16;
+    }
+    if(genre.strategy === true) {
+        genreId = genreId | 32;
+    }
+    if(genre.rpg === true) {
+        genreId = genreId | 64;
+    }
+    if(genre.simulation === true) {
+        genreId = genreId | 128;
+    }
+    if(genre.earlyAccess === true) {
+        genreId = genreId | 256;
+    }
+    if(genre.freeToPlay === true) {
+        genreId = genreId | 512;
+    }
+    if(genre.sports === true) {
+        genreId = genreId | 1024;
+    }
+    if(genre.racing === true) {
+        genreId = genreId | 2048;
+    }
+    if(genre.massivelyMultiplayer === true) {
+       genreId = genreId | 4096;
+    }
+
+    if(platform.Mac === true){
+        platformId=platformId | 1;
+    }
+    if(platform.Linux === true){
+        platformId=platformId | 2;
+    }
+    if(platform.Windows === true){
+        platformId=platformId | 4;
+    }
+
+
+    if(category.singlePlayer === true){
+        categoryId = categoryId | 1;
+    }
+    if(category.multiplayer === true){
+        categoryId = categoryId | 2;
+    }
+    if(category.coop === true){
+        categoryId = categoryId | 4;
+    }
+    if(category.mmo === true){
+        categoryId = categoryId | 8;
+    }
+    if(category.inAppPurchases === true){
+        categoryId = categoryId | 16;
+    }
+    if(category.includesSourceSdk === true){
+        categoryId = categoryId | 32;
+    }
+    if(category.includesLevelEditor === true){
+        categoryId = categoryId | 64;
+    }
+    if(category.vrSupport === true){
+        categoryId = categoryId | 128;
+    }
+
+    const sqlSelect = "SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + " AND platformId = " + platformId + " AND categoryId = " + categoryId;
+
+    pool.query(sqlSelect, (err, result) => {
       if (err) {
-        console.error(err);
-        res.status(500).send("Error executing query");
+        console.log(err);
       } else {
-        // Send the query results as the response
-        res.json(results);
+        res.send(result);
       }
     });
 
