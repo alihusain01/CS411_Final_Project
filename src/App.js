@@ -86,6 +86,18 @@ function App() {
         alert("Error: " + error.message); // Handle the error appropriately
       });
   };
+
+  const addToFavorites = (gameId) => {
+    axios
+      .post('http://localhost:3002/api/favoritedGames', {userName, gameId })
+      .then((response) => {
+        alert('Success: ' + response.data);
+      })
+      .catch((error) => {
+        alert('Error: ' + error.message);
+      });
+  };
+
   const handleGenreChange = (genre) => {
     setGenres((prevGenres) => ({
       ...prevGenres,
@@ -152,7 +164,7 @@ function App() {
 
           <Route
             path="/game/:id"
-            element={<GameDetails games={filteredGames} />}
+            element={<GameDetails games={filteredGames} addToFavorites={addToFavorites}/>}
           />
         </Routes>
       </div>

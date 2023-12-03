@@ -46,7 +46,7 @@ const matchColorText = (color) => {
   }
 }
 
-const GameDetails = ({ games }) => {
+const GameDetails = ({ games, addToFavorites }) => {
   let { id } = useParams();
   id = Number(id);
 
@@ -181,17 +181,6 @@ const GameDetails = ({ games }) => {
     minHeight: "350px", // Adjust the minimum height as needed
     backgroundSize: "cover", // You can adjust the background size as needed
     backgroundPosition: "center", // You can adjust the background position as needed
-  };
-
-  const addToFavorites = (gameId) => {
-    axios
-      .post('http://localhost:3002/api/favoritedGames', { userName, gameId })
-      .then((response) => {
-        alert('Success: ' + response.data);
-      })
-      .catch((error) => {
-        alert('Error: ' + error.message);
-      });
   };
 
   return (
@@ -401,6 +390,9 @@ const GameDetails = ({ games }) => {
               {/* Additional columns can be added here */}
               <form className="mt-4"></form>
             </div>
+            <button type="favoritedGame" className="btn btn-primary" onClick={() => addToFavorites(game.gameId)}>
+                  Add To Favorites
+                </button>
           </div>
         </div>
       </div>
