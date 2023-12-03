@@ -340,7 +340,6 @@ app.delete("/api/favoritedGames", async (req, res) => {
 app.get("/api/login", async (req, res) => {
   try {
     const { userName, password } = req.query;
-
     const sqlSelect = "SELECT * FROM steam_game_data.userInfo WHERE userName = '"+userName+"' AND password = '"+password+"'";
     console.log(sqlSelect);
     pool.query(sqlSelect, [userName, password], (err, result) => {
@@ -363,7 +362,6 @@ app.get("/api/login", async (req, res) => {
         }
       }
     });
-
   } catch (error) {
     console.error("Error handling the GET request:", error);
     res.status(500).send("Server Error: " + error);
@@ -372,8 +370,9 @@ app.get("/api/login", async (req, res) => {
 
 app.post("/api/favoritedGames", (req, res) => {
   try {
-    const { userName, gameId } = req.query;
-    const sqlCheckFavorite = "SELECT * FROM steam_game_data.favoritedGames WHERE userName = ? AND gameId = ?";
+    const { userName, gameId } = req.body;
+    const sqlCheckFavorite = "SELECT * FROM steam_game_data.favoritedGames WHERE userName ='"+userName+"' AND gameId = '"+gameId+"'";
+    console.log(sqlCheckFavorite);
     pool.query(sqlCheckFavorite, [userName, gameId], (checkError, checkResult) => {
       if (checkError) {
         console.log(checkError);
