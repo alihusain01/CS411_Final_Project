@@ -35,21 +35,30 @@ initializePool();
 app.get("/api/searchGames", async (req, res) => {
   try {
 
-    const { genres, platforms, categories } = req.query;
+    const { genres, platforms, categories, selectValues, searchBarValues } = req.query;
 
     // Convert the query parameters to objects
     const genre = JSON.parse(genres || '{}');
     const platform = JSON.parse(platforms || '{}');
     const category = JSON.parse(categories || '{}');
+    const selectValue = JSON.parse(selectValues || '{}');
+    const searchBarValue = JSON.parse(searchBarValues || '{}');
 
     // Now you can use these objects in your query
     console.log(genre);
     console.log(platform);
     console.log(category);
+    console.log(selectValue);
+    console.log(searchBarValue);
+
 
     var genreId = 0;
     var platformId = 0;
     var categoryId = 0;
+    var releaseSQLString;
+    var minAgeSQLString;
+    var priceSQLString;
+
 
     if(genre.nonGame === true) {
         genreId = genreId | 1;
@@ -127,7 +136,60 @@ app.get("/api/searchGames", async (req, res) => {
         categoryId = categoryId | 128;
     }
 
-    const sqlSelect = "SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + " AND platformId = " + platformId + " AND categoryId = " + categoryId;
+    if(selectValue.maximumPrice = " ") {
+      priceSQLString = ""
+    }
+    else {
+      priceSQLString = " AND priceFinal < " + selectValue.maximumPrice
+    }
+
+    if(selectValue.yearReleased === "1990-2000") {
+      releaseSQLString = " AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 1990 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2000";
+    }
+    else if(selectValue.yearReleased === "2000-2010") {
+      releaseSQLString = " AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2000 AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) < 2010";
+    }
+    else if(selectValue.yearReleased === "2010-") {
+      releaseSQLString = " AND CAST(RIGHT(releaseDate,4) AS UNSIGNED) >= 2010";
+    }
+    else {
+      releaseSQLString = ""
+    }
+
+    if(selectValue.minimumAge === "0") {
+      minAgeSQLString = "";
+    }
+    else if(selectValue.minimumAge === "13") {
+      minAgeSQLString = " AND requiredAge <= 13";
+    }
+    else if(selectValue.minimumAge === "16") {
+      minAgeSQLString = " AND requiredAge <= 16";
+    }
+    else if(selectValue.minimumAge === "17") {
+      minAgeSQLString = " AND requiredAge <= 17";
+    }
+    else if(selectValue.minimumAge === "18") {
+      minAgeSQLString = " AND requiredAge <= 18";
+    }
+    else {
+      minAgeSQLString = ""
+    }
+
+    if(searchBarValue !== "") {
+      textString = " " + " AND responseName LIKE '%" + searchBarValue + "%'"
+    }
+    else {
+      textString = ""
+    }
+
+    //releaseSQLString = "cast(right(releaseDate,4) AS UNSIGNED) >= 2016";
+  
+    console.log(selectValue.yearReleased);
+    console.log(releaseSQLString);
+
+    const sqlSelect = "SELECT * FROM steam_game_data.gameInfo WHERE genreId = " + genreId + " AND platformId = " + platformId + " AND categoryId = " + categoryId + priceSQLString + releaseSQLString + minAgeSQLString + textString;
+
+    console.log(sqlSelect);
 
     pool.query(sqlSelect, (err, result) => {
       if (err) {

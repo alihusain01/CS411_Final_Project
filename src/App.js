@@ -57,6 +57,8 @@ function App() {
     const genresString = JSON.stringify(genres);
     const platformsString = JSON.stringify(platforms);
     const categoriesString = JSON.stringify(categories);
+    const selectValuesString = JSON.stringify(selectValues);
+    const searchBarValueString = JSON.stringify(searchBarValue);
 
   
     // Make the GET request with query parameters
@@ -66,6 +68,8 @@ function App() {
           genres: genresString,
           platforms: platformsString,
           categories: categoriesString,
+          selectValues: selectValuesString,
+          searchBarValues: searchBarValueString,
         },
       })
       .then((response) => {
