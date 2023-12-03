@@ -12,7 +12,8 @@ const SearchBar = ({
   handlePlatformChange,
   handleCategoryChange,
   handleSelectChange,
-  searchGames
+  handleSearchBarChange,
+  searchGames,
 }) => {
   return (
     <div className="container-fluid mt-5">
@@ -40,6 +41,7 @@ const SearchBar = ({
                     className="form-control"
                     id="search"
                     placeholder="Game Title"
+                    onChange={handleSearchBarChange}
                   />
                 </div>
                 <div class="d-grid gap-2">

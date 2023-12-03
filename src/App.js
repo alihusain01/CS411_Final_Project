@@ -48,6 +48,10 @@ function App() {
     minimumAge: "",
   });
 
+  const [searchBarValue, setSearchBarValue] = useState("");
+
+  console.log(searchBarValue)
+
   const searchGames = () => {
     // Convert state objects to JSON strings
     const genresString = JSON.stringify(genres);
@@ -99,6 +103,10 @@ function App() {
     }));
   };
 
+  const handleSearchBarChange = (event) => {
+    setSearchBarValue(event.target.value);
+  }
+
   return (
     <Router>
       <div>
@@ -116,6 +124,7 @@ function App() {
                 handlePlatformChange={handlePlatformChange}
                 handleCategoryChange={handleCategoryChange}
                 handleSelectChange={handleSelectChange}
+                handleSearchBarChange={handleSearchBarChange}
                 searchGames={searchGames}
               />
             }
