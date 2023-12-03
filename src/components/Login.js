@@ -21,7 +21,7 @@ const Login = () => {
         },
       })
       .then((response) => {
-        const userData = { username: response.data.username, firstName: response.data.firstName, lastName: response.data.lastName };
+        const userData = { userName: response.data.userName, firstName: response.data.firstName, lastName: response.data.lastName };
 
         dispatch(login(userData));
 

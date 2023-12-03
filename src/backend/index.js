@@ -452,6 +452,26 @@ app.get("/api/WeightsForUser", (req, res) => {
   });
 });
 
+app.post("/api/NewWeightForUser", (req, res) => {
+  const userName = req.query.userName;
+  const filterName = req.query.filterName;
+  const weight = req.query.weight;
+
+  const query = "UPDATE steam_game_data.weights SET weight = " + weight + " WHERE userName = " + userName + " AND filterName = " + filterName;
+
+  console.log(query);
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log(err);
+    } else {
+      console.log(result);
+      res.status(200).send(result);
+    }
+  });
+});
+
 app.listen(3002, () => {
   console.log("Server is running on port 3002");
 });
