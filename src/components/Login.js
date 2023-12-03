@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../main.css';
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({onLoginSuccess}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -17,12 +17,15 @@ const Login = () => {
         },
       })
       .then((response) => {
-        alert('Success: ' + JSON.stringify(response.data)); // Update this based on your server response
+        onLoginSuccess(response.data.userName);
+        console.log('Success: ' + JSON.stringify(response.data)); // Update this based on your server response
       })
       .catch((error) => {
         alert('Incorrect username and password combination'); // Handle the error appropriately
       });
   };
+
+
   const handleEmailChange = (e) => {
     setUsername(e.target.value);
   };
@@ -33,7 +36,6 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Perform your login logic here
     console.log(`Email: ${username}, Password: ${password}`);
   };
 

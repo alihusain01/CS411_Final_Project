@@ -352,8 +352,7 @@ app.get("/api/login", async (req, res) => {
         if (result.length > 0) {
           const user = result[0]; // Assuming the query returns only one user
           // Store userName in the session
-          onLoginSuccess(userName);
-          res.send({
+          res.status(200).send({
             userName: user.userName,
             password: user.password,
             firstName: user.firstName,

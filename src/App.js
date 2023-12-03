@@ -52,12 +52,11 @@ function App() {
   });
 
   const [searchBarValue, setSearchBarValue] = useState("");
-
   const [filteredGames, setFilteredGames] = useState([]);
-  const [userName, setuserNameValue] = useState("");
-  
 
-  console.log(searchBarValue)
+  /* Login Information */
+  const [userName, setuserNameValue] = useState("");
+
 
   const searchGames = () => {
     // Convert state objects to JSON strings
@@ -114,13 +113,13 @@ function App() {
     }));
   };
 
-  const handleuserNameChange = (value) => {
-    setuserNameValue(value);
-  };
-
   const handleSearchBarChange = (event) => {
     setSearchBarValue(event.target.value);
   };
+
+  const onLoginSuccess = (userName) => {
+    setuserNameValue(userName);
+  }
 
   return (
     <Router>
@@ -147,7 +146,10 @@ function App() {
               </>
             }
           />
-          <Route path="/login" element={<Login onLoginSuccess={handleuserNameChange}/>} />
+          <Route
+            path="/login"
+            element={<Login onLoginSuccess={onLoginSuccess} />}
+          />
           <Route path="/signup" element={<Signup />} />
 
           <Route
