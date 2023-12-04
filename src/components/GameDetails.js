@@ -46,7 +46,7 @@ const matchColorText = (color) => {
   }
 }
 
-const GameDetails = ({ games, addToFavorites }) => {
+const GameDetails = ({ games, addToFavorites, userName }) => {
   let { id } = useParams();
   id = Number(id);
 
@@ -389,10 +389,16 @@ const GameDetails = ({ games, addToFavorites }) => {
               </Row>
               {/* Additional columns can be added here */}
               <form className="mt-4"></form>
-            </div>
-            <button type="favoritedGame" className="btn btn-primary" onClick={() => addToFavorites(game.gameId)}>
+              {userName && (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => addToFavorites(game.gameId)}
+                >
                   Add To Favorites
                 </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

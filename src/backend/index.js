@@ -452,6 +452,25 @@ app.get("/api/WeightsForUser", (req, res) => {
   });
 });
 
+app.get("/api/favoritedGames/:userName", async (req, res) => {
+  try {
+    const userName = req.params.userName;
+
+    const query = "SELECT * FROM steam_game_data.favoritedGames WHERE userName = ?";
+    pool.query(query, [userName], (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Server Error: " + err);
+      } else {
+        res.status(200).send(result);
+      }
+    });
+  } catch (error) {
+    console.error("Error handling the GET request:", error);
+    res.status(500).send("Server Error: " + error);
+  }
+});
+
 app.listen(3002, () => {
   console.log("Server is running on port 3002");
 });

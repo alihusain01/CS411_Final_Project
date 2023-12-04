@@ -1,27 +1,48 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Table from "react-bootstrap/Table";
+import Container from "react-bootstrap/Container";
+import { Link } from "react-router-dom";
 
-//larger h value for text=smaller text size
-
-//call API to get array of favorited games. Then do 1. GameName and image?
-
-const FavoritedGames = () => {
+function FavoritedGames({ games, userName, onDeleteFavoriteGame }) {
   return (
-    <div className="container-fluid mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-12">
-          <div className="card">
-            <div className="card-header">
-              <h4>Favorited Games</h4>
-            </div>
-            <div className="card-body">
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container className="mt-4">
+      <Table striped bordered hover variant="light">
+        <thead>
+          <tr>
+            <th>Game Title</th>
+            <th>Price</th>
+            <th>Release Date</th>
+            <th>Metacritic Score</th>
+            {userName !== "" && <th>Your Score</th>}
+            {userName !== "" && <th>Action</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {games.map((game, index) => (
+            <tr key={index}>
+              <td>
+                <Link to={`/game/${game.gameId}`}>{game.responseName}</Link>
+              </td>
+              <td>
+                {game.priceFinal} {game.priceCurrency}
+              </td>
+              <td>{game.releaseDate}</td>
+              <td>{game.metacritic}</td>
+              {userName !== "" && <td>{game.score.toFixed()}</td>}
+              {userName !== "" && (
+                <td>
+                  {/* Add the button or link to delete the favorited game */}
+                  <button onClick={() => onDeleteFavoriteGame(game.gameId)}>
+                    Delete
+                  </button>
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Container>
   );
-};
+}
 
 export default FavoritedGames;

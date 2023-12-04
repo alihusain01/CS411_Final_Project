@@ -1,7 +1,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Login from "./components/Login";
 import SearchBar from "./components/SearchBar";
 import NavigationBar from "./components/NavigationBar";
@@ -10,6 +10,7 @@ import axios from "axios";
 import ListView from "./components/ListView";
 import games from "./backend/testData.js";
 import GameDetails from "./components/GameDetails";
+import FavoritedGamesContainer from "./components/FavoritedGamesContainer"; 
 import { useDispatch } from "react-redux";
 import { logout } from "./user_auth/actions";
 
@@ -62,7 +63,7 @@ function App() {
 
   const [currWeights,setCurrWeights] = useState([]);
   const [currNormalWeights,setCurrNormalWeights] = useState([]);
-  // const [userName, setUserName]=useState("");
+  const [userName, setUserName]=useState("");
   const weightMath = () =>{
     // const userNameString='';
     // setUserName(userNameString);
@@ -214,8 +215,12 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           <Route
+            path="/favorited-games"
+            element={<FavoritedGamesContainer userName={userName} />}
+          />
+          <Route
             path="/game/:id"
-            element={<GameDetails games={filteredGames} addToFavorites={addToFavorites}/>}
+            element={<GameDetails games={filteredGames} addToFavorites={addToFavorites} userName={userName}/>}
           />
         </Routes>
       </div>
