@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { Link } from "react-router-dom";
 
 function NavigationBar({ onLogout }) {
   // Use useSelector to access the user's first name from the Redux store
@@ -22,6 +23,9 @@ function NavigationBar({ onLogout }) {
             </Nav.Link>
             {firstName ? (
               <>
+                <Link to="/favoritedGames" className="nav-link">
+                  Favorited Games
+                </Link>
                 <Nav.Link>{firstName}</Nav.Link>
                 <Nav.Link onClick={onLogout}>Log Out</Nav.Link>
               </>

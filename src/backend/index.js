@@ -310,17 +310,13 @@ app.get("/api/searchGames", async (req, res) => {
 app.delete("/api/favoritedGames", async (req, res) => {
   try {
 
-    const { userNameIn, gameIdIn } = req.query;
-
-    // Convert the query parameters to objects
-    const userName = JSON.parse(userNameIn || '{}');
-    const gameId = JSON.parse(gameIdIn || '{}');
+    const { userName, gameId } = req.query;
 
     // Now you can use these objects in your query
     console.log(userName);
     console.log(gameId);
 
-    const sqlDelete = "DELETE FROM steam_game_data.favoritedGames WHERE gameId = " + gameId;
+    const sqlDelete = "DELETE FROM steam_game_data.favoritedGames WHERE gameId = '" + gameId+"' AND userName = '"+userName+"'";
 
     console.log(sqlDelete);
 
@@ -451,6 +447,28 @@ app.get("/api/WeightsForUser", (req, res) => {
     }
   });
 });
+
+app.get("/api/favoritedGames", async (req, res) => {
+  try {
+    const userName = req.query.userName;
+    const query = "SELECT gameInfo.*, favoritedGames.userName FROM steam_game_data.favoritedGames JOIN steam_game_data.gameInfo ON favoritedGames.gameId = gameInfo.gameId WHERE favoritedGames.userName = '"+ userName+"'";
+
+    console.log(query);
+
+    pool.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Server Error: " + err);
+      } else {
+        res.status(200).send(result);
+      }
+    });
+  } catch (error) {
+    console.error("Error handling the GET request:", error);
+    res.status(500).send("Server Error: " + error);
+  }
+});
+
 
 app.post("/api/NewWeightForUser", (req, res) => {
 

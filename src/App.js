@@ -16,6 +16,7 @@ import axios from "axios";
 import ListView from "./components/ListView";
 import games from "./backend/testData.js";
 import GameDetails from "./components/GameDetails";
+import FavoritedGamesContainer from "./components/FavoritedGamesContainer"; 
 import { useDispatch } from "react-redux";
 import { logout } from "./user_auth/actions";
 import WeightsForm from "./components/WeightsForm.js";
@@ -180,7 +181,7 @@ function App() {
         alert("Success: " + response.data);
       })
       .catch((error) => {
-        alert("Error: " + error.message);
+        alert("Game has already been added to your favorite games list");
       });
   };
 
@@ -252,13 +253,12 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           <Route
+            path="/favoritedGames"
+            element={<FavoritedGamesContainer userName={userName} weightMath = {weightMath}/>}
+          />
+          <Route
             path="/game/:id"
-            element={
-              <GameDetails
-                games={filteredGames}
-                addToFavorites={addToFavorites}
-              />
-            }
+            element={<GameDetails games={filteredGames} addToFavorites={addToFavorites} userName={userName} />}
           />
         </Routes>
       </div>
