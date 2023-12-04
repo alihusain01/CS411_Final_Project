@@ -1,46 +1,75 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
 
 //can do onChange={} inside input for the range
 
-const submitWeights = async () => {
-//   // Convert state objects to JSON strings
-//   const priceWeightString = JSON.stringify(priceWeight);
-//   const metacriticWeightString = JSON.stringify(metacriticWeight);
-//   const recommendationCountWeightString = JSON.stringify(recommendationCountWeight);
-//   const steamSpyPlayerWeightString = JSON.stringify(steamSpyPlayerWeight);
+const submitWeights = (userName, priceWeight, metacriticWeight, recommendationCountWeight, steamSpyPlayerWeight) => {
+  // Convert state objects to JSON strings
+  const priceWeightString = JSON.stringify(priceWeight);
+  const metacriticWeightString = JSON.stringify(metacriticWeight);
+  const recommendationCountWeightString = JSON.stringify(recommendationCountWeight);
+  const steamSpyPlayerWeightString = JSON.stringify(steamSpyPlayerWeight);
+  
+  const priceFinal = "priceFinal";
+  const metacritic = "metacritic";
+  const recommendationCount = "recommendationCount";
+  const steamSpyPlayersEstimate = "steamSpyPlayersEstimate";
+  console.log(priceWeightString);
+  console.log(priceFinal);
+  console.log(userName.userName);
+  const finalUser = userName.userName;
+  axios.post('http://localhost:3002/api/NewWeightForUser', {
+    userName: finalUser,
+    filterName: priceFinal,
+    weight: priceWeightString,
+  })
+  .then((response) => {
+    //alert("Success: " + response.data);
+  })
+  .catch((error) => {
+    alert("Error: " + error.message);
+  });
 
-//   // Make the GET request with query parameters
-//   axios
-//     .get("http://localhost:3002/api/searchGames", {
-//       params: {
-//         genres: genresString,
-//         platforms: platformsString,
-//         categories: categoriesString,
-//         selectValues: selectValuesString,
-//         searchBarValues: searchBarValueString,
-//       },
-//     })
-//     .then(async (response) => {
-//       // setFilteredGamesTemp(response.data);
-//       var temp = response.data;
-//       if (userName !== " ") {
-//         var scoredGames = await weightMath(temp);
-//         console.log("TEST: " + scoredGames);
-//         setFilteredGames(scoredGames);
-//         console.log(filteredGames);
-//       } else {
-//         setFilteredGames(temp);
-//       }
-//       console.log(response);
-//     })
-//     .catch((error) => {
-//       alert("Error: " + error.message); // Handle the error appropriately
-//     });
+  axios.post('http://localhost:3002/api/NewWeightForUser', {
+    userName: finalUser,
+    filterName: metacritic,
+    weight: metacriticWeightString,
+  })
+  .then((response) => {
+    //alert("Success: " + response.data);
+  })
+  .catch((error) => {
+    alert("Error: " + error.message);
+  });
+
+  axios.post('http://localhost:3002/api/NewWeightForUser', {
+    userName: finalUser,
+    filterName: recommendationCount,
+    weight: recommendationCountWeightString,
+  })
+  .then((response) => {
+    //alert("Success: " + response.data);
+  })
+  .catch((error) => {
+    alert("Error: " + error.message);
+  });
+
+  axios.post('http://localhost:3002/api/NewWeightForUser', {
+    userName: finalUser,
+    filterName: steamSpyPlayersEstimate,
+    weight: steamSpyPlayerWeightString,
+  })
+  .then((response) => {
+    //alert("Success: " + response.data);
+  })
+  .catch((error) => {
+    alert("Error: " + error.message);
+  });
+  
  };
 
-
-const WeightsForm = () => {
+const WeightsForm = (userName) => {
   const [priceWeight, setPriceWeight] = useState(0);
   const [metacriticWeight, setMetacriticWeight] = useState(0);
   const [recommendationCountWeight, setRecommendationCountWeight] = useState(0);
@@ -48,6 +77,7 @@ const WeightsForm = () => {
 
   const handlePriceChange = (event) => {
     setPriceWeight(parseInt(event.target.value));
+    console.log(priceWeight);
   };
   const handleMetacriticChange = (event) => {
     setMetacriticWeight(parseInt(event.target.value));
@@ -114,6 +144,11 @@ const WeightsForm = () => {
               <h6>
                 0 means it doesn't impact your choice at all and 10 means it is very important to you
               </h6>
+              <div class="d-grid gap-2">
+                  <button class="btn btn-primary" type="button" onClick={()=>submitWeights(userName, priceWeight, metacriticWeight, recommendationCountWeight, steamSpyPlayerWeight)}>
+                    Submit!
+                  </button>
+                </div>
             </div>
           </div>
         </div>

@@ -248,7 +248,7 @@ function App() {
             }
           />
           <Route path="/login" element={<Login />} />
-          <Route path="/weights" element={<WeightsForm />} />
+          <Route path="/weights" element={<WeightsForm userName = {userName} />} />
           <Route path="/signup" element={<Signup />} />
 
           <Route
