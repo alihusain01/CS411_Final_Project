@@ -257,6 +257,17 @@ const GameDetails = ({ games, addToFavorites, userName }) => {
                     </div>
                   </div>
                 </div>
+                <div className="text-center mb-4">
+                {userName && (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => addToFavorites(game.gameId)}
+                  >
+                    Add To Favorites
+                  </button>
+                )}
+              </div>
               </Row>
 
               <Row>
@@ -388,17 +399,6 @@ const GameDetails = ({ games, addToFavorites, userName }) => {
                 </Col>
               </Row>
               {/* Additional columns can be added here */}
-              <div className="text-center mt-4">
-                {userName && (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => addToFavorites(game.gameId)}
-                  >
-                    Add To Favorites
-                  </button>
-                )}
-              </div>
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
+import "../main.css";
 
 function NavigationBar({ onLogout }) {
   // Use useSelector to access the user's first name from the Redux store

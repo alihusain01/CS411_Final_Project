@@ -46,7 +46,7 @@ function FavoritedGamesContainer({ userName, weightMath }) {
             <th>Price</th>
             <th>Release Date</th>
             <th>Metacritic Score</th>
-            {userName !== "" && <th>Your Score</th>}
+            {userName !== "" && <th>TGI Recommendation Score</th>}
             {userName !== "" && <th>Action</th>}
           </tr>
         </thead>

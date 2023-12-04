@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
@@ -74,6 +74,7 @@ const WeightsForm = (userName) => {
   const [metacriticWeight, setMetacriticWeight] = useState(0);
   const [recommendationCountWeight, setRecommendationCountWeight] = useState(0);
   const [steamSpyPlayerWeight, setSteamSpyPlayerWeight] = useState(0);
+  
 
   const handlePriceChange = (event) => {
     setPriceWeight(parseInt(event.target.value));
