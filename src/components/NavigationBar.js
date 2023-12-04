@@ -24,7 +24,7 @@ function NavigationBar({ onLogout }) {
             {firstName ? (
               <>
                 <Nav.Link>{firstName}</Nav.Link>
-                <Link to="/favorited-games" className="nav-link">
+                <Link to="/favoritedGames" className="nav-link">
                   Favorited Games
                 </Link>
                 <Nav.Link onClick={onLogout}>Log Out</Nav.Link>

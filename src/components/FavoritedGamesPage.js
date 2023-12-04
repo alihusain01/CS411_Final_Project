@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 
 function FavoritedGames({ games, userName, onDeleteFavoriteGame }) {
+  
   return (
     <Container className="mt-4">
       <Table striped bordered hover variant="light">
@@ -28,7 +29,7 @@ function FavoritedGames({ games, userName, onDeleteFavoriteGame }) {
               </td>
               <td>{game.releaseDate}</td>
               <td>{game.metacritic}</td>
-              {userName !== "" && <td>{game.score.toFixed()}</td>}
+              {userName !== "" && <td>{game.score !== undefined ? game.score.toFixed() : ""}</td>}
               {userName !== "" && (
                 <td>
                   {/* Add the button or link to delete the favorited game */}

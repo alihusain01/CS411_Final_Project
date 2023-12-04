@@ -452,7 +452,7 @@ app.get("/api/WeightsForUser", (req, res) => {
   });
 });
 
-app.get("/api/favoritedGames/:userName", async (req, res) => {
+app.get("/api/favoritedGames/", async (req, res) => {
   try {
     const userName = req.params.userName;
 
@@ -470,6 +470,7 @@ app.get("/api/favoritedGames/:userName", async (req, res) => {
     res.status(500).send("Server Error: " + error);
   }}
   );
+
 app.post("/api/NewWeightForUser", (req, res) => {
   const userName = req.query.userName;
   const filterName = req.query.filterName;

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import FavoritedGames from "./FavoritedGamesPage";
+import Table from "react-bootstrap/Table";
+import Container from "react-bootstrap/Container";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import Button from 'react-bootstrap/Button';
 
-function FavoritedGamesContainer({ userName }) {
+function FavoritedGamesContainer({ userName, games }) {
   const [favoritedGames, setFavoritedGames] = useState([]);
 
   useEffect(() => {
@@ -38,11 +42,40 @@ function FavoritedGamesContainer({ userName }) {
   };
 
   return (
-    <FavoritedGames
-      games={favoritedGames}
-      userName={userName}
-      onDeleteFavoriteGame={handleDeleteFavorite}
-    />
+    <Container className="mt-4">
+      <Table striped bordered hover variant="light">
+        <thead>
+          <tr>
+            <th>Game Title</th>
+            <th>Price</th>
+            <th>Release Date</th>
+            <th>Metacritic Score</th>
+            {userName !== "" && <th>Your Score</th>}
+            {userName !== "" && <th>Action</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {games.map((game, index) => (
+            <tr key={index}>
+              <td>
+                <p>{game.responseName}</p>
+              </td>
+              <td>
+                {game.priceFinal} {game.priceCurrency}
+              </td>
+              <td>{game.releaseDate}</td>
+              <td>{game.metacritic}</td>
+              <td>{game.score !== undefined ? game.score.toFixed() : ""}</td>
+              <td>
+                {/* Add the button or link to delete the favorited game */}
+                <Button variant="danger">Delete</Button>{' '}
+              </td>
+
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Container>
   );
 }
 

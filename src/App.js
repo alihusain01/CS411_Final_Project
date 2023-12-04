@@ -253,8 +253,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           <Route
-            path="/favorited-games"
-            element={<FavoritedGamesContainer userName={userName} />}
+            path="/favoritedGames"
+            element={<FavoritedGamesContainer userName={userName} games = {games}/>}
           />
           <Route
             path="/game/:id"
