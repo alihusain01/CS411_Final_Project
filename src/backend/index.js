@@ -469,6 +469,24 @@ app.get("/api/favoritedGames/:userName", async (req, res) => {
     console.error("Error handling the GET request:", error);
     res.status(500).send("Server Error: " + error);
   }
+app.post("/api/NewWeightForUser", (req, res) => {
+  const userName = req.query.userName;
+  const filterName = req.query.filterName;
+  const weight = req.query.weight;
+
+  const query = "UPDATE steam_game_data.weights SET weight = " + weight + " WHERE userName = " + userName + " AND filterName = " + filterName;
+
+  console.log(query);
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log(err);
+    } else {
+      console.log(result);
+      res.status(200).send(result);
+    }
+  });
 });
 
 app.listen(3002, () => {

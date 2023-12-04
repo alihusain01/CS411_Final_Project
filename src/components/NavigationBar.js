@@ -18,6 +18,9 @@ function NavigationBar({ onLogout }) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
+            <Nav.Link href="/weights">
+              {firstName ? "Adjust Weights" : ""}
+            </Nav.Link>
             {firstName ? (
               <>
                 <Nav.Link>{firstName}</Nav.Link>

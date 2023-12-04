@@ -4,7 +4,6 @@ import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 
 function ListView({ games, userName }) {
-  const userName2="ldaskfj;s";
   return (
     <Container className="mt-4">
       <Table striped bordered hover variant="light">
@@ -14,7 +13,7 @@ function ListView({ games, userName }) {
             <th>Price</th>
             <th>Release Date</th>
             <th>Metacritic Score</th>
-            {userName!="" &&(<th>Your Score</th>)}
+            {userName!==null && (<th>Your Score</th>)}
           </tr>
         </thead>
         <tbody>
@@ -28,7 +27,7 @@ function ListView({ games, userName }) {
               </td>
               <td>{game.releaseDate}</td>
               <td>{game.metacritic}</td>
-              {userName!="" && <td>{game.score.toFixed()}</td>}
+              {userName!==null && <td>{game.score.toFixed()}</td>}
             </tr>
           ))}
         </tbody>
