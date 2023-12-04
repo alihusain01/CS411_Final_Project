@@ -1,26 +1,63 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 //can do onChange={} inside input for the range
 
-const WeightsForm = () => {
-  const [priceWeight,setPriceWeight]=useState(0);
-  const [metacriticWeight,setMetacriticWeight]=useState(0);
-  const [recommendationCountWeight,setRecommendationCountWeight]=useState(0);
-  const [steamSpyPlayerWeight,setsteamSpyPlayerWeight]=useState(0);
+const submitWeights = async () => {
+//   // Convert state objects to JSON strings
+//   const priceWeightString = JSON.stringify(priceWeight);
+//   const metacriticWeightString = JSON.stringify(metacriticWeight);
+//   const recommendationCountWeightString = JSON.stringify(recommendationCountWeight);
+//   const steamSpyPlayerWeightString = JSON.stringify(steamSpyPlayerWeight);
 
-  const handlePriceChange = (event) =>{
+//   // Make the GET request with query parameters
+//   axios
+//     .get("http://localhost:3002/api/searchGames", {
+//       params: {
+//         genres: genresString,
+//         platforms: platformsString,
+//         categories: categoriesString,
+//         selectValues: selectValuesString,
+//         searchBarValues: searchBarValueString,
+//       },
+//     })
+//     .then(async (response) => {
+//       // setFilteredGamesTemp(response.data);
+//       var temp = response.data;
+//       if (userName !== " ") {
+//         var scoredGames = await weightMath(temp);
+//         console.log("TEST: " + scoredGames);
+//         setFilteredGames(scoredGames);
+//         console.log(filteredGames);
+//       } else {
+//         setFilteredGames(temp);
+//       }
+//       console.log(response);
+//     })
+//     .catch((error) => {
+//       alert("Error: " + error.message); // Handle the error appropriately
+//     });
+ };
+
+
+const WeightsForm = () => {
+  const [priceWeight, setPriceWeight] = useState(0);
+  const [metacriticWeight, setMetacriticWeight] = useState(0);
+  const [recommendationCountWeight, setRecommendationCountWeight] = useState(0);
+  const [steamSpyPlayerWeight, setsteamSpyPlayerWeight] = useState(0);
+
+  const handlePriceChange = (event) => {
     setPriceWeight(parseInt(event.target.value));
-  }
-  const handleMetacriticChange = (event) =>{
+  };
+  const handleMetacriticChange = (event) => {
     setMetacriticWeight(parseInt(event.target.value));
-  }
-  const handleRecommendationChange = (event) =>{
+  };
+  const handleRecommendationChange = (event) => {
     setRecommendationCountWeight(parseInt(event.target.value));
-  }
-  const handleSpyPlayersChange = (event) =>{
+  };
+  const handleSpyPlayersChange = (event) => {
     setsteamSpyPlayerWeight(parseInt(event.target.value));
-  }
+  };
   return (
     <div className="container-fluid mt-5">
       <div className="row justify-content-center">
@@ -30,23 +67,53 @@ const WeightsForm = () => {
               <h4>Rank Profile</h4>
             </div>
             <div className="card-body">
-            <label for="customRange" class="form-label">How much does the price of the game impact your choice?</label>
-            <input type="range" class="form-range" step="10" id="customRange" onChange={handlePriceChange}></input>
-            <p><div style = {{ whiteSpace: "pre" }}>{`${' '}0${'                                  '}1${'                                   '}2${'                                   '}3${'                                   '}4${'                                   '}5${'                                   '}6${'                                   '}7${'                                   '}8${'                                   '}9${'                                  '}10`}</div>
-            </p>
-            <label for="customRange" class="form-label">How much does the metacritic score of the game impact your choice?</label>
-            <input type="range" class="form-range" step="10" id="customRange" onChange={handleMetacriticChange} ></input>
-            <p><div style = {{ whiteSpace: "pre" }}>{`${' '}0${'                                  '}1${'                                   '}2${'                                   '}3${'                                   '}4${'                                   '}5${'                                   '}6${'                                   '}7${'                                   '}8${'                                   '}9${'                                  '}10`}</div>
-            </p>
-            <label for="customRange" class="form-label">How much does the number of recommendations of the game impact your choice?</label>
-            <input type="range" class="form-range" step="10" id="customRange" onChange={handleRecommendationChange}></input>
-            <p><div style = {{ whiteSpace: "pre" }}>{`${' '}0${'                                  '}1${'                                   '}2${'                                   '}3${'                                   '}4${'                                   '}5${'                                   '}6${'                                   '}7${'                                   '}8${'                                   '}9${'                                  '}10`}</div>
-            </p>
-            <label for="customRange" class="form-label">How much does the steam spy players estimate of the game impact your choice?</label>
-            <input type="range" class="form-range" step="10" id="customRange" onChange={handleSpyPlayersChange}></input>
-            <p><div style = {{ whiteSpace: "pre" }}>{`${' '}0${'                                  '}1${'                                   '}2${'                                   '}3${'                                   '}4${'                                   '}5${'                                   '}6${'                                   '}7${'                                   '}8${'                                   '}9${'                                  '}10`}</div>
-            </p>
-            <h6>0 means it doesn't impact your choice at all and 10 means it is very important to you</h6>
+              <label htmlFor="customRangePrice" className="form-label">
+                How much does the price of the game impact your choice?
+              </label>
+              <input
+                type="range"
+                className="form-range"
+                step="10"
+                id="customRangePrice"
+                onChange={handlePriceChange}
+              />
+              <span>{priceWeight}</span>
+              <label htmlFor="customRangeMetacritic" className="form-label">
+                How much does the metacritic score of the game impact your choice?
+              </label>
+              <input
+                type="range"
+                className="form-range"
+                step="10"
+                id="customRangeMetacritic"
+                onChange={handleMetacriticChange}
+              />
+              <span>{metacriticWeight}</span>
+              <label htmlFor="customRangeRecommendation" className="form-label">
+                How much does the number of recommendations of the game impact your choice?
+              </label>
+              <input
+                type="range"
+                className="form-range"
+                step="10"
+                id="customRangeRecommendation"
+                onChange={handleRecommendationChange}
+              />
+              <span>{recommendationCountWeight}</span>
+              <label htmlFor="customRangeSteamSpy" className="form-label">
+                How much does the steam spy players estimate of the game impact your choice?
+              </label>
+              <input
+                type="range"
+                className="form-range"
+                step="10"
+                id="customRangeSteamSpy"
+                onChange={handleSpyPlayersChange}
+              />
+              <span>{steamSpyPlayerWeight}</span>
+              <h6>
+                0 means it doesn't impact your choice at all and 10 means it is very important to you
+              </h6>
             </div>
           </div>
         </div>

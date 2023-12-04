@@ -6,7 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 
 function NavigationBar({ onLogout }) {
   // Use useSelector to access the user's first name from the Redux store
-  const firstName = useSelector((state) => state.user.firstName);  
+  const firstName = useSelector((state) => state.user.firstName);
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -17,6 +17,9 @@ function NavigationBar({ onLogout }) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
+            <Nav.Link href="/weights">
+              {firstName ? "Adjust Weights" : ""}
+            </Nav.Link>
             {firstName ? (
               <>
                 <Nav.Link>{firstName}</Nav.Link>

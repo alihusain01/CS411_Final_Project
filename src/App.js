@@ -18,6 +18,7 @@ import games from "./backend/testData.js";
 import GameDetails from "./components/GameDetails";
 import { useDispatch } from "react-redux";
 import { logout } from "./user_auth/actions";
+import WeightsForm from "./components/WeightsForm.js";
 
 function App() {
   useEffect(() => {
@@ -247,6 +248,7 @@ function App() {
             }
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/weights" element={<WeightsForm />} />
           <Route path="/signup" element={<Signup />} />
 
           <Route
