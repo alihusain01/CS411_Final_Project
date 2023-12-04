@@ -16,7 +16,7 @@ const FilterAccordian = ({genres, platforms, categories, selectValues, handleGen
           <h6>Genre</h6>{" "}
         </Accordion.Header>
         <Accordion.Body>
-          <GenreFilter genres={genres} handleGenreChange={handleGenreChange}/>
+          <GenreFilter genres={genres} handleGenreChange={handleGenreChange}></GenreFilter>
         </Accordion.Body>
       </Accordion.Item>
 
