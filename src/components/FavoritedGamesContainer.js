@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from "react";
-import FavoritedGames from "./FavoritedGamesPage";
 import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
 
-function FavoritedGamesContainer({ userName, games }) {
+function FavoritedGamesContainer({ userName, weightMath }) {
   const [favoritedGames, setFavoritedGames] = useState([]);
 
   useEffect(() => {
-    if (userName !== "") {
-      // Call the API to get favorited games for the specific user
-      fetchFavoritedGames(userName);
-    }
+    fetchFavoritedGames(userName);
   }, [userName]);
 
   const fetchFavoritedGames = (userName) => {
     axios
-      .get(`http://localhost:3002/api/favoritedGames/${userName}`)
+      .get('http://localhost:3002/api/favoritedGames', { params: { userName: userName } })
       .then((response) => {
         setFavoritedGames(response.data);
       })
@@ -30,9 +26,8 @@ function FavoritedGamesContainer({ userName, games }) {
   const handleDeleteFavorite = (gameId) => {
     // Make a DELETE request to your API endpoint
     axios
-      .delete(`http://localhost:3002/api/favoritedGames/${userName}/${gameId}`)
+      .delete('http://localhost:3002/api/favoritedGames', { params: { userName: userName, gameId: gameId } })
       .then((response) => {
-        // If the deletion is successful, update the list of favorited games
         fetchFavoritedGames(userName);
         console.log("Favorite game deleted successfully");
       })
@@ -55,10 +50,10 @@ function FavoritedGamesContainer({ userName, games }) {
           </tr>
         </thead>
         <tbody>
-          {games.map((game, index) => (
+          {favoritedGames.map((game, index) => (
             <tr key={index}>
               <td>
-                <p>{game.responseName}</p>
+                <Link to={`/game/${game.gameId}`}>{game.responseName}</Link>
               </td>
               <td>
                 {game.priceFinal} {game.priceCurrency}
@@ -68,9 +63,8 @@ function FavoritedGamesContainer({ userName, games }) {
               <td>{game.score !== undefined ? game.score.toFixed() : ""}</td>
               <td>
                 {/* Add the button or link to delete the favorited game */}
-                <Button variant="danger">Delete</Button>{' '}
+                <Button variant="danger" onClick={() => handleDeleteFavorite(game.gameId)}>Delete</Button>{' '}
               </td>
-
             </tr>
           ))}
         </tbody>

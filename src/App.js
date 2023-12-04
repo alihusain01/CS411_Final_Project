@@ -181,7 +181,7 @@ function App() {
         alert("Success: " + response.data);
       })
       .catch((error) => {
-        alert("Error: " + error.message);
+        alert("Game has already been added to your favorite games list");
       });
   };
 
@@ -254,11 +254,11 @@ function App() {
 
           <Route
             path="/favoritedGames"
-            element={<FavoritedGamesContainer userName={userName} games = {games}/>}
+            element={<FavoritedGamesContainer userName={userName} games = {games} weightMath = {weightMath}/>}
           />
           <Route
             path="/game/:id"
-            element={<GameDetails games={filteredGames} addToFavorites={addToFavorites} userName={userName}/>}
+            element={<GameDetails games={filteredGames} addToFavorites={addToFavorites} userName={userName} />}
           />
         </Routes>
       </div>

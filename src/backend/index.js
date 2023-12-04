@@ -452,12 +452,14 @@ app.get("/api/WeightsForUser", (req, res) => {
   });
 });
 
-app.get("/api/favoritedGames/", async (req, res) => {
+app.get("/api/favoritedGames", async (req, res) => {
   try {
-    const userName = req.params.userName;
+    const userName = req.query.userName;
+    const query = "SELECT gameInfo.*, favoritedGames.userName FROM steam_game_data.favoritedGames JOIN steam_game_data.gameInfo ON favoritedGames.gameId = gameInfo.gameId WHERE favoritedGames.userName = '"+ userName+"'";
 
-    const query = "SELECT * FROM steam_game_data.favoritedGames WHERE userName = ?";
-    pool.query(query, [userName], (err, result) => {
+    console.log(query);
+
+    pool.query(query, (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).send("Server Error: " + err);
@@ -468,8 +470,9 @@ app.get("/api/favoritedGames/", async (req, res) => {
   } catch (error) {
     console.error("Error handling the GET request:", error);
     res.status(500).send("Server Error: " + error);
-  }}
-  );
+  }
+});
+
 
 app.post("/api/NewWeightForUser", (req, res) => {
   const userName = req.query.userName;
