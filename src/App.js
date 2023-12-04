@@ -254,7 +254,7 @@ function App() {
 
           <Route
             path="/favoritedGames"
-            element={<FavoritedGamesContainer userName={userName} games = {games} weightMath = {weightMath}/>}
+            element={<FavoritedGamesContainer userName={userName} weightMath = {weightMath}/>}
           />
           <Route
             path="/game/:id"

@@ -12,11 +12,12 @@ function FavoritedGamesContainer({ userName, weightMath }) {
     fetchFavoritedGames(userName);
   }, [userName]);
 
-  const fetchFavoritedGames = (userName) => {
+  const fetchFavoritedGames = async (userName) => {
     axios
       .get('http://localhost:3002/api/favoritedGames', { params: { userName: userName } })
-      .then((response) => {
-        setFavoritedGames(response.data);
+      .then(async (response) => {
+        var scored_games = await weightMath(response.data);
+        setFavoritedGames(scored_games);
       })
       .catch((error) => {
         console.error("Error fetching favorited games:", error);
@@ -53,7 +54,7 @@ function FavoritedGamesContainer({ userName, weightMath }) {
           {favoritedGames.map((game, index) => (
             <tr key={index}>
               <td>
-                <Link to={`/game/${game.gameId}`}>{game.responseName}</Link>
+                <p>{game.responseName}</p>
               </td>
               <td>
                 {game.priceFinal} {game.priceCurrency}
