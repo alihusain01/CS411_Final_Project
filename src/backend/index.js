@@ -310,17 +310,13 @@ app.get("/api/searchGames", async (req, res) => {
 app.delete("/api/favoritedGames", async (req, res) => {
   try {
 
-    const { userNameIn, gameIdIn } = req.query;
-
-    // Convert the query parameters to objects
-    const userName = JSON.parse(userNameIn || '{}');
-    const gameId = JSON.parse(gameIdIn || '{}');
+    const { userName, gameId } = req.query;
 
     // Now you can use these objects in your query
     console.log(userName);
     console.log(gameId);
 
-    const sqlDelete = "DELETE FROM steam_game_data.favoritedGames WHERE gameId = " + gameId;
+    const sqlDelete = "DELETE FROM steam_game_data.favoritedGames WHERE gameId = '" + gameId+"' AND userName = '"+userName+"'";
 
     console.log(sqlDelete);
 
