@@ -468,7 +468,8 @@ app.get("/api/favoritedGames/:userName", async (req, res) => {
   } catch (error) {
     console.error("Error handling the GET request:", error);
     res.status(500).send("Server Error: " + error);
-  }
+  }}
+  );
 app.post("/api/NewWeightForUser", (req, res) => {
   const userName = req.query.userName;
   const filterName = req.query.filterName;
