@@ -453,11 +453,15 @@ app.get("/api/WeightsForUser", (req, res) => {
 });
 
 app.post("/api/NewWeightForUser", (req, res) => {
-  const userName = req.query.userName;
-  const filterName = req.query.filterName;
-  const weight = req.query.weight;
 
-  const query = "UPDATE steam_game_data.weights SET weight = " + weight + " WHERE userName = " + userName + " AND filterName = " + filterName;
+  const { userName, filterName, weight } = req.body;
+
+  console.log(userName);
+  console.log(filterName);
+  console.log(weight);
+
+
+  const query = "UPDATE steam_game_data.weights SET weight = " + weight + " WHERE userName = '" + userName + "' AND filterName = '" + filterName+"'";
 
   console.log(query);
 
