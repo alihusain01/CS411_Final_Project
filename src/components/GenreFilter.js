@@ -11,11 +11,6 @@ let final;
     .get("http://localhost:3002/api/findCounts")
     .then((response) => {
       const counts = response.data;
-      // console.log(counts);
-      // setCounts(genreCounts)
-      // console.log(counts);
-
-        console.log(counts[0][0].genreName);
       const indexedGenres = {};
       for (let i=0;i<counts[0].length;i++){
         if(counts[0][i].genreName=="NonGame"){
@@ -31,14 +26,7 @@ let final;
         indexedGenres[counts[0][i].genreName] = counts[0][i].counts;
         }
       }
-      // counts.forEach((genre) => {
-      // indexedGenres[genre.genreName] = genre;
-      console.log(indexedGenres);
-      // final=indexedGenres;
-      // console.log(final);
-      // console.log(final['Non Game']);
       setFinalCounts(indexedGenres);
-      console.log(finalCounts);
     })
     .catch((error) => {
       alert("Error: " + error.message); // Handle the error appropriately
@@ -56,7 +44,6 @@ let final;
             .replace(/([A-Z])/g, ' $1')
             .replace(/^./, str => str.toUpperCase())
             .replace('Mmo', 'MMO'); // Special case for acronyms
-            // console.log(label);
             
 
           return (
@@ -69,7 +56,7 @@ let final;
                 id={genreKey}
               />
               <label className="form-check-label" htmlFor={genreKey}>
-                {label +" (" +finalCounts[label]+ ")"}
+                {finalCounts!=undefined? label + " (" +finalCounts[label]+ ")" :label}
               </label>
             </div>
           );
